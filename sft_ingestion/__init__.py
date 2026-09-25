@@ -1,0 +1,1 @@
+# GAZİ SFT Ingestion paketi

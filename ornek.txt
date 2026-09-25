@@ -1,0 +1,128 @@
+| XML alanı                      | DB alanı                          |
+| ------------------------------ | --------------------------------- |
+| `Patient/ExternalId`           | `patient.external_id`             |
+| `Patient/FirstName`            | `patient.first_name`              |
+| `Patient/LastName`             | `patient.last_name`               |
+| `Patient/Birthdate`            | `patient.birth_date`              |
+| `Visit/@LocalDate`             | `visit.local_datetime_raw`        |
+| `Visit/UtcDate`                | `visit.utc_datetime`              |
+| `Visit/Height`                 | `visit.height_m`                  |
+| `Visit/Weight`                 | `visit.weight_kg`                 |
+| `Visit/PredModuleName`         | `visit.prediction_module`         |
+| `Level/@Type`                  | `measurement_level.level_type`    |
+| `Measurement/@MeasurementType` | `measurement.measurement_type`    |
+| `Trial/@Number`                | `trial.trial_number`              |
+| `Parameter/@ParameterId`       | `trial_parameter.parameter_id`    |
+| `Parameter/Value`              | `trial_parameter.measured_value`  |
+| `DisplayUnit/@Name`            | `trial_parameter.display_unit`    |
+| `Curve/@Type`                  | `curve.curve_type`                |
+| `Curve/Data`                   | `curve.raw_data` ve `curve_point` |
+
+
+CREATE TABLE source_document (
+    id              BIGSERIAL PRIMARY KEY,
+    group_key       VARCHAR(150),
+    original_name   VARCHAR(255) NOT NULL,
+    file_type       VARCHAR(20) NOT NULL,
+    sha256          CHAR(64) NOT NULL UNIQUE,
+    raw_content     BYTEA,
+    parser_version  VARCHAR(50),
+    import_status   VARCHAR(30) NOT NULL,
+    imported_at     TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    error_details   JSONB
+);
+
+CREATE TABLE patient (
+    id              BIGSERIAL PRIMARY KEY,
+    source_system   VARCHAR(100) NOT NULL,
+    external_id     VARCHAR(100) NOT NULL,
+    first_name      VARCHAR(150),
+    last_name       VARCHAR(150),
+    birth_date      DATE,
+    ethnic_group    VARCHAR(100),
+    UNIQUE (source_system, external_id)
+);
+
+CREATE TABLE visit (
+    id                    BIGSERIAL PRIMARY KEY,
+    patient_id            BIGINT NOT NULL REFERENCES patient(id),
+    local_datetime_raw    VARCHAR(50),
+    local_datetime        TIMESTAMP,
+    utc_datetime          TIMESTAMPTZ,
+    age                   INTEGER,
+    gender                VARCHAR(30),
+    biological_gender     VARCHAR(30),
+    height_m              NUMERIC(8,4),
+    weight_kg             NUMERIC(8,3),
+    prediction_module     VARCHAR(100),
+    review_status         VARCHAR(30)
+);
+
+CREATE TABLE measurement_level (
+    id                BIGSERIAL PRIMARY KEY,
+    visit_id          BIGINT NOT NULL REFERENCES visit(id),
+    level_type        VARCHAR(30),
+    sequence_number   INTEGER,
+    patient_position  VARCHAR(50)
+);
+
+CREATE TABLE measurement (
+    id                    BIGSERIAL PRIMARY KEY,
+    level_id              BIGINT NOT NULL REFERENCES measurement_level(id),
+    measurement_type      VARCHAR(100),
+    measurement_status    VARCHAR(50),
+    local_datetime_raw    VARCHAR(50),
+    duration              NUMERIC,
+    method_name           VARCHAR(150),
+    software_version      VARCHAR(100),
+    workstation_name      VARCHAR(150)
+);
+
+CREATE TABLE trial (
+    id              BIGSERIAL PRIMARY KEY,
+    measurement_id  BIGINT NOT NULL REFERENCES measurement(id),
+    trial_number    INTEGER NOT NULL,
+    status          VARCHAR(100),
+    duration        NUMERIC,
+    UNIQUE (measurement_id, trial_number)
+);
+
+CREATE TABLE trial_parameter (
+    id                      BIGSERIAL PRIMARY KEY,
+    trial_id                BIGINT NOT NULL REFERENCES trial(id),
+    parameter_id            BIGINT,
+    short_name              VARCHAR(50),
+    long_name               VARCHAR(255),
+    measured_value          NUMERIC,
+    predicted_reference_id  BIGINT,
+    store_unit              VARCHAR(100),
+    display_unit            VARCHAR(100),
+    conversion_factor       NUMERIC,
+    raw_value               VARCHAR(100),
+    UNIQUE (trial_id, parameter_id, short_name)
+);
+
+CREATE TABLE curve (
+    id              BIGSERIAL PRIMARY KEY,
+    trial_id        BIGINT NOT NULL REFERENCES trial(id),
+    curve_scope     VARCHAR(20), -- REPORT veya RAW
+    data_type       VARCHAR(100),
+    curve_type      VARCHAR(100),
+    curve_status    VARCHAR(50),
+    sample_rate     VARCHAR(100),
+    x_unit          VARCHAR(50),
+    y_unit          VARCHAR(50),
+    min_x           NUMERIC,
+    max_x           NUMERIC,
+    min_y           NUMERIC,
+    max_y           NUMERIC,
+    raw_data        TEXT
+);
+
+CREATE TABLE curve_point (
+    curve_id        BIGINT NOT NULL REFERENCES curve(id),
+    sequence_number INTEGER NOT NULL,
+    x_value         NUMERIC NOT NULL,
+    y_value         NUMERIC NOT NULL,
+    PRIMARY KEY (curve_id, sequence_number)
+);

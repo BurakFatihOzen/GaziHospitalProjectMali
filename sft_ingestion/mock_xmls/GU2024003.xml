@@ -1,0 +1,1381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PatientTree xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns_xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns_xsd="http://www.w3.org/2001/XMLSchema" Version="NIOSH_XmlExport.V3.0">
+  <Patient>
+    <ExternalId>GU2024003</ExternalId>
+    <LastName>Yıldız</LastName>
+    <FirstName>Elif</FirstName>
+    <Birthdate>2019-02-07T00:00:00Z</Birthdate>
+    <RaceInformation EthnicGroupId="1" Name="Caucasian">
+      <EthnicGroup>Caucasian</EthnicGroup>
+    </RaceInformation>
+  </Patient>
+  <VisitTrees>
+    <VisitTree>
+      <Visit LocalDate="2026-08-04T03:00:00.000Z">
+        <Age>7</Age>
+        <Gender>Female</Gender>
+        <BiologicalGender>Female</BiologicalGender>
+        <ReviewStatus>4</ReviewStatus>
+        <Height>1.22</Height>
+        <Weight>22.0</Weight>
+        <PredModuleName>GLI 2012</PredModuleName>
+        <UtcDate>2026-08-04T00:00:00.000Z</UtcDate>
+        <Operator>
+          <Name>Lab Teknisyeni</Name>
+        </Operator>
+        <Physician>
+          <Name>Çocuk Alerji</Name>
+          <FirstName>Uzm. Dr.</FirstName>
+        </Physician>
+      </Visit>
+      <Levels>
+        <LevelTree>
+          <Level Type="Pre" Sequence="1" PatientPosition="Sitting"/>
+          <Measurements>
+            <Measurement MeasurementType="Spirometry" Status="None">
+              <Duration>120.0</Duration>
+              <SoftwareVersionOriginal>SentrySuite 3.3</SoftwareVersionOriginal>
+              <SoftwareVersionActual>SentrySuite 3.3</SoftwareVersionActual>
+              <LocalDate>2026-08-04T03:05:00.000Z</LocalDate>
+              <ConductedMethodIds>
+                <string>Spirometry_FVC</string>
+              </ConductedMethodIds>
+              <Workstation>
+                <Name>00000000-0000-0000-0000-000000000001</Name>
+              </Workstation>
+              <Trials>
+                <Trial Number="0">
+                  <Status>None</Status>
+                  <Duration>36.1</Duration>
+                  <Parameters>
+                    <Parameter ParameterId="65537" ShortName="VC IN ">
+                      <LongName>VC IN</LongName>
+                      <Value>1.581</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65544" ShortName="VC EX ">
+                      <LongName>VC EX</LongName>
+                      <Value>1.563</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65545" ShortName="VC MAX">
+                      <LongName>VC MAX</LongName>
+                      <PredictedReference>219</PredictedReference>
+                      <Value>1.581</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65547" ShortName="FEV1 ">
+                      <LongName>FEV 1</LongName>
+                      <PredictedReference>44</PredictedReference>
+                      <Value>1.189</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65548" ShortName="FEV1%P">
+                      <LongName>FEV 1 % Pred</LongName>
+                      <Value>55.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65551" ShortName="FEV1%F">
+                      <LongName>FEV 1 % FVC</LongName>
+                      <PredictedReference>48</PredictedReference>
+                      <Value>76.272</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65567" ShortName="FVC   ">
+                      <LongName>FVC</LongName>
+                      <PredictedReference>42</PredictedReference>
+                      <Value>1.565</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65568" ShortName="FVC%P ">
+                      <LongName>FVC % Pred</LongName>
+                      <Value>75.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65569" ShortName="FET   ">
+                      <LongName>FET</LongName>
+                      <Value>6.5283</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65573" ShortName="PEF   ">
+                      <LongName>PEF</LongName>
+                      <PredictedReference>33</PredictedReference>
+                      <Value>3.385</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65625" ShortName="FEV6  ">
+                      <LongName>FEV 6</LongName>
+                      <PredictedReference>202</PredictedReference>
+                      <Value>1.5687</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65626" ShortName="FEV1%6">
+                      <LongName>FEV 1 % FEV 6</LongName>
+                      <PredictedReference>203</PredictedReference>
+                      <Value>75.7952</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65640" ShortName="MFEF  ">
+                      <LongName>MFEF 75/25</LongName>
+                      <PredictedReference>29</PredictedReference>
+                      <Value>1.0667</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65669" ShortName="FEF1s ">
+                      <LongName>Forced expiratory flow after 1 second</LongName>
+                      <Value>0.244</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                  </Parameters>
+                  <ReportCurveData>
+                    <Curves>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_EX">
+                        <Data>0,20 40,1123 80,2115 120,3264 160,3174 200,2925 240,2756 280,2547 320,2348 360,2231 400,2015 440,1833 480,1877 520,1636 560,1537 600,1474 640,1335 680,1238 720,1235 760,1065 800,1010 840,1048 880,875 920,759 960,707 1000,672 1040,711 1080,644 1120,506 1160,545 1200,426 1240,447 1280,502 1320,398 1360,412 1400,263 1440,270 1480,220 1520,201 1560,254</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1560</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>3264</MaxY>
+                      </Curve>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_IN">
+                        <Data>0,-2 40,-451 80,-892 120,-1341 160,-1771 200,-2218 240,-2604 280,-2567 320,-2533 360,-2504 400,-2492 440,-2496 480,-2485 520,-2460 560,-2466 600,-2430 640,-2394 680,-2389 720,-2370 760,-2381 800,-2369 840,-2313 880,-2325 920,-2307 960,-2258 1000,-2286 1040,-2265 1080,-2238 1120,-2203 1160,-2196 1200,-2050 1240,-1904 1280,-1692 1320,-1504 1360,-1324 1400,-1160 1440,-926 1480,-779 1520,-555 1560,-406 1600,-222</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1600</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>2604</MaxY>
+                      </Curve>
+                    </Curves>
+                  </ReportCurveData>
+                </Trial>
+                <Trial Number="1">
+                  <Status>Valid</Status>
+                  <Duration>28.5</Duration>
+                  <Parameters>
+                    <Parameter ParameterId="65537" ShortName="VC IN ">
+                      <LongName>VC IN</LongName>
+                      <Value>1.58</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65544" ShortName="VC EX ">
+                      <LongName>VC EX</LongName>
+                      <Value>1.562</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65545" ShortName="VC MAX">
+                      <LongName>VC MAX</LongName>
+                      <PredictedReference>219</PredictedReference>
+                      <Value>1.58</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65547" ShortName="FEV1 ">
+                      <LongName>FEV 1</LongName>
+                      <PredictedReference>44</PredictedReference>
+                      <Value>1.1496</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65548" ShortName="FEV1%P">
+                      <LongName>FEV 1 % Pred</LongName>
+                      <Value>55.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65551" ShortName="FEV1%F">
+                      <LongName>FEV 1 % FVC</LongName>
+                      <PredictedReference>48</PredictedReference>
+                      <Value>73.701</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65567" ShortName="FVC   ">
+                      <LongName>FVC</LongName>
+                      <PredictedReference>42</PredictedReference>
+                      <Value>1.564</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65568" ShortName="FVC%P ">
+                      <LongName>FVC % Pred</LongName>
+                      <Value>75.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65569" ShortName="FET   ">
+                      <LongName>FET</LongName>
+                      <Value>6.8446</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65573" ShortName="PEF   ">
+                      <LongName>PEF</LongName>
+                      <PredictedReference>33</PredictedReference>
+                      <Value>3.53</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65625" ShortName="FEV6  ">
+                      <LongName>FEV 6</LongName>
+                      <PredictedReference>202</PredictedReference>
+                      <Value>1.5655</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65626" ShortName="FEV1%6">
+                      <LongName>FEV 1 % FEV 6</LongName>
+                      <PredictedReference>203</PredictedReference>
+                      <Value>73.4334</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65640" ShortName="MFEF  ">
+                      <LongName>MFEF 75/25</LongName>
+                      <PredictedReference>29</PredictedReference>
+                      <Value>0.9501</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65669" ShortName="FEF1s ">
+                      <LongName>Forced expiratory flow after 1 second</LongName>
+                      <Value>0.208</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                  </Parameters>
+                  <ReportCurveData>
+                    <Curves>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_EX">
+                        <Data>0,7 40,1164 80,2220 120,3370 160,3296 200,3088 240,2849 280,2688 320,2579 360,2334 400,2176 440,2080 480,1965 520,1758 560,1660 600,1535 640,1514 680,1232 720,1250 760,1058 800,1080 840,917 880,946 920,895 960,751 1000,696 1040,728 1080,612 1120,536 1160,482 1200,501 1240,399 1280,508 1320,476 1360,407 1400,433 1440,245 1480,313 1520,285 1560,314</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1560</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>3370</MaxY>
+                      </Curve>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_IN">
+                        <Data>0,0 40,-431 80,-869 120,-1303 160,-1749 200,-2159 240,-2523 280,-2498 320,-2482 360,-2484 400,-2492 440,-2466 480,-2437 520,-2430 560,-2411 600,-2396 640,-2375 680,-2352 720,-2365 760,-2337 800,-2327 840,-2287 880,-2267 920,-2284 960,-2224 1000,-2236 1040,-2225 1080,-2183 1120,-2158 1160,-2143 1200,-2058 1240,-1833 1280,-1675 1320,-1493 1360,-1298 1400,-1104 1440,-950 1480,-727 1520,-580 1560,-354 1600,-197</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1600</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>2523</MaxY>
+                      </Curve>
+                    </Curves>
+                  </ReportCurveData>
+                </Trial>
+                <Trial Number="2">
+                  <Status>Valid</Status>
+                  <Duration>35.6</Duration>
+                  <Parameters>
+                    <Parameter ParameterId="65537" ShortName="VC IN ">
+                      <LongName>VC IN</LongName>
+                      <Value>1.642</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65544" ShortName="VC EX ">
+                      <LongName>VC EX</LongName>
+                      <Value>1.624</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65545" ShortName="VC MAX">
+                      <LongName>VC MAX</LongName>
+                      <PredictedReference>219</PredictedReference>
+                      <Value>1.642</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65547" ShortName="FEV1 ">
+                      <LongName>FEV 1</LongName>
+                      <PredictedReference>44</PredictedReference>
+                      <Value>1.1544</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65548" ShortName="FEV1%P">
+                      <LongName>FEV 1 % Pred</LongName>
+                      <Value>55.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65551" ShortName="FEV1%F">
+                      <LongName>FEV 1 % FVC</LongName>
+                      <PredictedReference>48</PredictedReference>
+                      <Value>70.913</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65567" ShortName="FVC   ">
+                      <LongName>FVC</LongName>
+                      <PredictedReference>42</PredictedReference>
+                      <Value>1.626</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65568" ShortName="FVC%P ">
+                      <LongName>FVC % Pred</LongName>
+                      <Value>75.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65569" ShortName="FET   ">
+                      <LongName>FET</LongName>
+                      <Value>8.4719</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65573" ShortName="PEF   ">
+                      <LongName>PEF</LongName>
+                      <PredictedReference>33</PredictedReference>
+                      <Value>3.635</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65625" ShortName="FEV6  ">
+                      <LongName>FEV 6</LongName>
+                      <PredictedReference>202</PredictedReference>
+                      <Value>1.6165</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65626" ShortName="FEV1%6">
+                      <LongName>FEV 1 % FEV 6</LongName>
+                      <PredictedReference>203</PredictedReference>
+                      <Value>71.4135</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65640" ShortName="MFEF  ">
+                      <LongName>MFEF 75/25</LongName>
+                      <PredictedReference>29</PredictedReference>
+                      <Value>0.9789</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65669" ShortName="FEF1s ">
+                      <LongName>Forced expiratory flow after 1 second</LongName>
+                      <Value>0.268</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                  </Parameters>
+                  <ReportCurveData>
+                    <Curves>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_EX">
+                        <Data>0,40 40,1152 80,2237 120,3316 160,3458 200,3281 240,2926 280,2876 320,2552 360,2498 400,2228 440,2080 480,1925 520,1929 560,1681 600,1560 640,1502 680,1363 720,1257 760,1213 800,1183 840,1021 880,941 920,896 960,851 1000,947 1040,745 1080,767 1120,592 1160,563 1200,574 1240,533 1280,525 1320,414 1360,494 1400,425 1440,412 1480,321 1520,332 1560,276 1600,227</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1600</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>3458</MaxY>
+                      </Curve>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_IN">
+                        <Data>0,0 40,-437 80,-872 120,-1267 160,-1687 200,-2120 240,-2547 280,-2585 320,-2565 360,-2548 400,-2530 440,-2518 480,-2484 520,-2506 560,-2482 600,-2467 640,-2470 680,-2419 720,-2410 760,-2414 800,-2370 840,-2380 880,-2348 920,-2319 960,-2296 1000,-2293 1040,-2285 1080,-2251 1120,-2236 1160,-2218 1200,-2238 1240,-2141 1280,-1958 1320,-1770 1360,-1560 1400,-1381 1440,-1229 1480,-1022 1520,-858 1560,-690 1600,-494 1640,-292</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1640</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>2585</MaxY>
+                      </Curve>
+                    </Curves>
+                  </ReportCurveData>
+                </Trial>
+              </Trials>
+            </Measurement>
+          </Measurements>
+        </LevelTree>
+        <LevelTree>
+          <Level Type="Post" Sequence="2" PatientPosition="Sitting"/>
+          <Measurements>
+            <Measurement MeasurementType="Spirometry" Status="None">
+              <Duration>99.0</Duration>
+              <SoftwareVersionOriginal>SentrySuite 3.3</SoftwareVersionOriginal>
+              <SoftwareVersionActual>SentrySuite 3.3</SoftwareVersionActual>
+              <LocalDate>2026-08-04T03:10:00.000Z</LocalDate>
+              <ConductedMethodIds>
+                <string>Spirometry_FVC</string>
+              </ConductedMethodIds>
+              <Workstation>
+                <Name>00000000-0000-0000-0000-000000000001</Name>
+              </Workstation>
+              <Trials>
+                <Trial Number="0">
+                  <Status>None</Status>
+                  <Duration>37.4</Duration>
+                  <Parameters>
+                    <Parameter ParameterId="65537" ShortName="VC IN ">
+                      <LongName>VC IN</LongName>
+                      <Value>1.638</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65544" ShortName="VC EX ">
+                      <LongName>VC EX</LongName>
+                      <Value>1.62</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65545" ShortName="VC MAX">
+                      <LongName>VC MAX</LongName>
+                      <PredictedReference>219</PredictedReference>
+                      <Value>1.638</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65547" ShortName="FEV1 ">
+                      <LongName>FEV 1</LongName>
+                      <PredictedReference>44</PredictedReference>
+                      <Value>1.4767</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65548" ShortName="FEV1%P">
+                      <LongName>FEV 1 % Pred</LongName>
+                      <Value>70.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65551" ShortName="FEV1%F">
+                      <LongName>FEV 1 % FVC</LongName>
+                      <PredictedReference>48</PredictedReference>
+                      <Value>90.802</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65567" ShortName="FVC   ">
+                      <LongName>FVC</LongName>
+                      <PredictedReference>42</PredictedReference>
+                      <Value>1.622</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65568" ShortName="FVC%P ">
+                      <LongName>FVC % Pred</LongName>
+                      <Value>75.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65569" ShortName="FET   ">
+                      <LongName>FET</LongName>
+                      <Value>8.5992</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65573" ShortName="PEF   ">
+                      <LongName>PEF</LongName>
+                      <PredictedReference>33</PredictedReference>
+                      <Value>3.486</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65625" ShortName="FEV6  ">
+                      <LongName>FEV 6</LongName>
+                      <PredictedReference>202</PredictedReference>
+                      <Value>1.6258</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65626" ShortName="FEV1%6">
+                      <LongName>FEV 1 % FEV 6</LongName>
+                      <PredictedReference>203</PredictedReference>
+                      <Value>90.8291</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65640" ShortName="MFEF  ">
+                      <LongName>MFEF 75/25</LongName>
+                      <PredictedReference>29</PredictedReference>
+                      <Value>1.0281</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65669" ShortName="FEF1s ">
+                      <LongName>Forced expiratory flow after 1 second</LongName>
+                      <Value>0.252</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                  </Parameters>
+                  <ReportCurveData>
+                    <Curves>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_EX">
+                        <Data>0,0 40,1115 80,2149 120,3262 160,3290 200,3148 240,2879 280,2705 320,2458 360,2389 400,2144 440,1986 480,1830 520,1843 560,1745 600,1577 640,1533 680,1314 720,1163 760,1230 800,1068 840,1090 880,1029 920,843 960,783 1000,828 1040,675 1080,605 1120,687 1160,557 1200,547 1240,577 1280,465 1320,435 1360,400 1400,323 1440,346 1480,364 1520,252 1560,232 1600,224</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1600</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>3290</MaxY>
+                      </Curve>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_IN">
+                        <Data>0,0 40,-437 80,-917 120,-1327 160,-1788 200,-2235 240,-2672 280,-2698 320,-2698 360,-2652 400,-2639 440,-2640 480,-2604 520,-2587 560,-2592 600,-2557 640,-2565 680,-2511 720,-2534 760,-2484 800,-2500 840,-2483 880,-2467 920,-2445 960,-2428 1000,-2408 1040,-2377 1080,-2378 1120,-2334 1160,-2339 1200,-2337 1240,-2194 1280,-2020 1320,-1791 1360,-1634 1400,-1462 1440,-1237 1480,-1034 1520,-849 1560,-668 1600,-507 1640,-321</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1640</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>2698</MaxY>
+                      </Curve>
+                    </Curves>
+                  </ReportCurveData>
+                </Trial>
+                <Trial Number="1">
+                  <Status>Valid</Status>
+                  <Duration>29.0</Duration>
+                  <Parameters>
+                    <Parameter ParameterId="65537" ShortName="VC IN ">
+                      <LongName>VC IN</LongName>
+                      <Value>1.61</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65544" ShortName="VC EX ">
+                      <LongName>VC EX</LongName>
+                      <Value>1.592</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65545" ShortName="VC MAX">
+                      <LongName>VC MAX</LongName>
+                      <PredictedReference>219</PredictedReference>
+                      <Value>1.61</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65547" ShortName="FEV1 ">
+                      <LongName>FEV 1</LongName>
+                      <PredictedReference>44</PredictedReference>
+                      <Value>1.5002</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65548" ShortName="FEV1%P">
+                      <LongName>FEV 1 % Pred</LongName>
+                      <Value>70.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65551" ShortName="FEV1%F">
+                      <LongName>FEV 1 % FVC</LongName>
+                      <PredictedReference>48</PredictedReference>
+                      <Value>93.717</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65567" ShortName="FVC   ">
+                      <LongName>FVC</LongName>
+                      <PredictedReference>42</PredictedReference>
+                      <Value>1.594</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65568" ShortName="FVC%P ">
+                      <LongName>FVC % Pred</LongName>
+                      <Value>75.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65569" ShortName="FET   ">
+                      <LongName>FET</LongName>
+                      <Value>6.8881</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65573" ShortName="PEF   ">
+                      <LongName>PEF</LongName>
+                      <PredictedReference>33</PredictedReference>
+                      <Value>3.409</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65625" ShortName="FEV6  ">
+                      <LongName>FEV 6</LongName>
+                      <PredictedReference>202</PredictedReference>
+                      <Value>1.5854</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65626" ShortName="FEV1%6">
+                      <LongName>FEV 1 % FEV 6</LongName>
+                      <PredictedReference>203</PredictedReference>
+                      <Value>94.626</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65640" ShortName="MFEF  ">
+                      <LongName>MFEF 75/25</LongName>
+                      <PredictedReference>29</PredictedReference>
+                      <Value>1.1139</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65669" ShortName="FEF1s ">
+                      <LongName>Forced expiratory flow after 1 second</LongName>
+                      <Value>0.236</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                  </Parameters>
+                  <ReportCurveData>
+                    <Curves>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_EX">
+                        <Data>0,0 40,1022 80,2117 120,3238 160,3249 200,3050 240,2869 280,2558 320,2441 360,2288 400,2204 440,2008 480,1738 520,1766 560,1558 600,1395 640,1306 680,1180 720,1228 760,1088 800,1091 840,952 880,912 920,733 960,683 1000,704 1040,705 1080,627 1120,565 1160,595 1200,478 1240,500 1280,522 1320,436 1360,358 1400,333 1440,243 1480,266 1520,297 1560,197</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1560</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>3249</MaxY>
+                      </Curve>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_IN">
+                        <Data>0,-12 40,-389 80,-847 120,-1252 160,-1644 200,-2068 240,-2480 280,-2453 320,-2421 360,-2423 400,-2387 440,-2392 480,-2393 520,-2358 560,-2335 600,-2347 640,-2316 680,-2293 720,-2305 760,-2286 800,-2245 840,-2228 880,-2229 920,-2203 960,-2202 1000,-2164 1040,-2135 1080,-2148 1120,-2148 1160,-2124 1200,-2079 1240,-1899 1280,-1720 1320,-1552 1360,-1368 1400,-1189 1440,-1044 1480,-836 1520,-687 1560,-506 1600,-306</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1600</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>2480</MaxY>
+                      </Curve>
+                    </Curves>
+                  </ReportCurveData>
+                </Trial>
+                <Trial Number="2">
+                  <Status>Valid</Status>
+                  <Duration>35.2</Duration>
+                  <Parameters>
+                    <Parameter ParameterId="65537" ShortName="VC IN ">
+                      <LongName>VC IN</LongName>
+                      <Value>1.655</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65544" ShortName="VC EX ">
+                      <LongName>VC EX</LongName>
+                      <Value>1.637</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65545" ShortName="VC MAX">
+                      <LongName>VC MAX</LongName>
+                      <PredictedReference>219</PredictedReference>
+                      <Value>1.655</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65547" ShortName="FEV1 ">
+                      <LongName>FEV 1</LongName>
+                      <PredictedReference>44</PredictedReference>
+                      <Value>1.4743</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65548" ShortName="FEV1%P">
+                      <LongName>FEV 1 % Pred</LongName>
+                      <Value>70.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65551" ShortName="FEV1%F">
+                      <LongName>FEV 1 % FVC</LongName>
+                      <PredictedReference>48</PredictedReference>
+                      <Value>89.973</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65567" ShortName="FVC   ">
+                      <LongName>FVC</LongName>
+                      <PredictedReference>42</PredictedReference>
+                      <Value>1.639</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65568" ShortName="FVC%P ">
+                      <LongName>FVC % Pred</LongName>
+                      <Value>75.0</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65569" ShortName="FET   ">
+                      <LongName>FET</LongName>
+                      <Value>6.4213</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_S">
+                          <LongText>sec</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65573" ShortName="PEF   ">
+                      <LongName>PEF</LongName>
+                      <PredictedReference>33</PredictedReference>
+                      <Value>3.687</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65625" ShortName="FEV6  ">
+                      <LongName>FEV 6</LongName>
+                      <PredictedReference>202</PredictedReference>
+                      <Value>1.6266</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_LITER">
+                          <LongText>Liter</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65626" ShortName="FEV1%6">
+                      <LongName>FEV 1 % FEV 6</LongName>
+                      <PredictedReference>203</PredictedReference>
+                      <Value>90.6369</Value>
+                      <Unit>
+                        <StoreUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="ISO_PER_CENT">
+                          <LongText>%</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65640" ShortName="MFEF  ">
+                      <LongName>MFEF 75/25</LongName>
+                      <PredictedReference>29</PredictedReference>
+                      <Value>0.9777</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                    <Parameter ParameterId="65669" ShortName="FEF1s ">
+                      <LongName>Forced expiratory flow after 1 second</LongName>
+                      <Value>0.268</Value>
+                      <Unit>
+                        <StoreUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </StoreUnit>
+                        <DisplayUnit Name="LITER_PER_SECOND">
+                          <LongText>L/s</LongText>
+                        </DisplayUnit>
+                        <StoreToDisplayFactor>1</StoreToDisplayFactor>
+                      </Unit>
+                    </Parameter>
+                  </Parameters>
+                  <ReportCurveData>
+                    <Curves>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_EX">
+                        <Data>0,0 40,1137 80,2215 120,3421 160,3507 200,3286 240,3083 280,2852 320,2689 360,2518 400,2220 440,2178 480,2159 520,1835 560,1817 600,1726 640,1461 680,1476 720,1276 760,1334 800,1127 840,1193 880,936 920,1018 960,886 1000,894 1040,743 1080,673 1120,745 1160,653 1200,620 1240,583 1280,538 1320,466 1360,470 1400,431 1440,432 1480,305 1520,339 1560,266 1600,359</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1600</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>3507</MaxY>
+                      </Curve>
+                      <Curve DataType="SpirFvc" Status="Valid" SampleRate="40 ml" Type="TYPE_FVC_IN">
+                        <Data>0,0 40,-410 80,-797 120,-1193 160,-1558 200,-1959 240,-2372 280,-2395 320,-2415 360,-2363 400,-2382 440,-2330 480,-2322 520,-2301 560,-2292 600,-2286 640,-2287 680,-2246 720,-2230 760,-2240 800,-2207 840,-2180 880,-2191 920,-2149 960,-2133 1000,-2151 1040,-2124 1080,-2136 1120,-2109 1160,-2077 1200,-2054 1240,-1994 1280,-1829 1320,-1657 1360,-1500 1400,-1335 1440,-1163 1480,-1005 1520,-835 1560,-660 1600,-483 1640,-348</Data>
+                        <XResolution>ml</XResolution>
+                        <YResolution>ml/s</YResolution>
+                        <MinX>0</MinX>
+                        <MaxX>1640</MaxX>
+                        <MinY>0</MinY>
+                        <MaxY>2415</MaxY>
+                      </Curve>
+                    </Curves>
+                  </ReportCurveData>
+                </Trial>
+              </Trials>
+            </Measurement>
+          </Measurements>
+        </LevelTree>
+      </Levels>
+    </VisitTree>
+  </VisitTrees>
+</PatientTree>

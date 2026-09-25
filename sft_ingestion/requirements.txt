@@ -1,0 +1,21 @@
+# Gazi SFT Ingestion MVP — Python Bağımlılıkları
+# Kurulum: pip install -r requirements.txt
+
+# XML ayrıştırma (C tabanlı hızlı parser)
+lxml>=5.2.0
+
+# PostgreSQL sürücüsü
+psycopg2-binary>=2.9.9
+
+# Ortam değişkeni yönetimi (.env dosyası desteği)
+python-dotenv>=1.0.0
+
+# API katmanı
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# Excel dışa aktarma
+openpyxl>=3.1.2
+
+# Multipart dosya yükleme desteği (FastAPI UploadFile)
+python-multipart>=0.0.9
