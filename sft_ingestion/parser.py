@@ -214,12 +214,14 @@ class VyaireXMLParser:
         )
 
         for level_tree_el in visit_tree_el.findall(".//LevelTree"):
-            level_dto = self._parse_level(level_tree_el)
+            level_dto = self._parse_level(level_tree_el, visit_dto=dto)
             dto.levels.append(level_dto)
 
         return dto
 
-    def _parse_level(self, level_tree_el: etree._Element) -> LevelDTO:
+    def _parse_level(
+        self, level_tree_el: etree._Element, visit_dto: Optional[VisitDTO] = None
+    ) -> LevelDTO:
         level_el = level_tree_el.find("Level")
         dto = LevelDTO()
         if level_el is not None:
@@ -229,12 +231,14 @@ class VyaireXMLParser:
             dto.patient_position = level_el.get("PatientPosition", "")
 
         for meas_el in level_tree_el.findall(".//Measurement"):
-            meas_dto = self._parse_measurement(meas_el)
+            meas_dto = self._parse_measurement(meas_el, visit_dto=visit_dto)
             dto.measurements.append(meas_dto)
 
         return dto
 
-    def _parse_measurement(self, meas_el: etree._Element) -> MeasurementDTO:
+    def _parse_measurement(
+        self, meas_el: etree._Element, visit_dto: Optional[VisitDTO] = None
+    ) -> MeasurementDTO:
         dto = MeasurementDTO(
             measurement_type=meas_el.get("MeasurementType", ""),
             measurement_status=meas_el.get("Status", ""),
@@ -245,12 +249,14 @@ class VyaireXMLParser:
         )
 
         for trial_el in meas_el.findall(".//Trial"):
-            trial_dto = self._parse_trial(trial_el)
+            trial_dto = self._parse_trial(trial_el, visit_dto=visit_dto)
             dto.trials.append(trial_dto)
 
         return dto
 
-    def _parse_trial(self, trial_el: etree._Element) -> TrialDTO:
+    def _parse_trial(
+        self, trial_el: etree._Element, visit_dto: Optional[VisitDTO] = None
+    ) -> TrialDTO:
         number_str = trial_el.get("Number", "0")
         dto = TrialDTO(
             trial_number=int(number_str) if number_str.isdigit() else 0,
@@ -263,8 +269,8 @@ class VyaireXMLParser:
             param_dto = self._parse_parameter(param_el)
             dto.parameters.append(param_dto)
 
-        # Çekirdek metrikleri parametrelerden çıkar
-        self._extract_core_metrics(dto)
+        # Çekirdek metrikleri parametrelerden çıkar ve %Pred hesapla
+        self._extract_core_metrics(dto, visit_dto=visit_dto)
 
         # ReportCurveData eğrileri
         for curve_el in trial_el.findall(".//ReportCurveData//Curve"):
@@ -309,7 +315,9 @@ class VyaireXMLParser:
             raw_value=raw_val,
         )
 
-    def _extract_core_metrics(self, trial: TrialDTO) -> None:
+    def _extract_core_metrics(
+        self, trial: TrialDTO, visit_dto: Optional[VisitDTO] = None
+    ) -> None:
         """
         trial.parameters listesini tarayarak çekirdek klinik metrikleri
         trial nesnesinin fiziksel alanlarına yazar.
@@ -331,6 +339,29 @@ class VyaireXMLParser:
                 trial.fev1_pred_percent = val
             elif sn in ("FVC%P", "FVC%Pred"):
                 trial.fvc_pred_percent = val
+
+        # % Predicted hesaplama: Eğer XML'de doğrudan yoksa GLI / ECCS referansıyla hesapla
+        if (trial.fev1_pred_percent is None or trial.fvc_pred_percent is None) and visit_dto:
+            h = visit_dto.height_m
+            a = visit_dto.age
+            g = visit_dto.biological_gender or visit_dto.gender
+            if h and a:
+                is_male = (g or "").lower().startswith("m")
+                if a < 18:
+                    fvc_pred = 0.0395 * (h * 100) - 2.60 + (a - 8) * 0.095
+                    fev1_pred = fvc_pred * 0.85
+                else:
+                    if is_male:
+                        fev1_pred = 4.30 * h - 0.029 * a - 2.49
+                        fvc_pred  = 5.76 * h - 0.026 * a - 4.34
+                    else:
+                        fev1_pred = 3.95 * h - 0.025 * a - 2.60
+                        fvc_pred  = 4.43 * h - 0.026 * a - 2.89
+
+                if trial.fev1_pred_percent is None and trial.fev1_val and fev1_pred > 0:
+                    trial.fev1_pred_percent = round((trial.fev1_val / fev1_pred) * 100, 1)
+                if trial.fvc_pred_percent is None and trial.fvc_val and fvc_pred > 0:
+                    trial.fvc_pred_percent = round((trial.fvc_val / fvc_pred) * 100, 1)
 
     def _parse_curve(self, curve_el: etree._Element, scope: str) -> CurveDTO:
         data_str = self._text(curve_el, "Data")

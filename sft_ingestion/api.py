@@ -794,6 +794,19 @@ async def upload_xml(
         result.duration_ms = (t_end - t_start).total_seconds() * 1000
         results.append(result)
 
+    # Başarılı yükleme varsa Materialized View'ı otomatik yenile
+    if success > 0:
+        conn_mv = _get_conn()
+        try:
+            with conn_mv.cursor() as cur:
+                cur.execute("REFRESH MATERIALIZED VIEW mv_spirometry_best_trial;")
+            conn_mv.commit()
+            logger.info("mv_spirometry_best_trial basariyla yenilendi.")
+        except Exception as mv_exc:
+            logger.warning("Materialized View yenileme hatasi: %s", mv_exc)
+        finally:
+            conn_mv.close()
+
     return UploadResponse(
         total_uploaded=len(files),
         success=success,

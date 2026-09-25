@@ -266,8 +266,8 @@ CREATE MATERIALIZED VIEW IF NOT EXISTS mv_spirometry_best_trial AS
     INNER JOIN visit v              ON v.patient_id = p.id
     INNER JOIN measurement_level ml ON ml.visit_id = v.id
     INNER JOIN measurement m        ON m.level_id = ml.id
-    INNER JOIN trial t              ON t.measurement_id = m.id
     WHERE t.trial_number = 0
+      AND (m.measurement_type ILIKE '%spiro%' OR t.fev1_val IS NOT NULL)
 WITH DATA;
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_mv_spiro_trial
