@@ -378,7 +378,7 @@ def get_cohort(
         patients = [_row_to_cohort_patient(row, cols) for row in rows]
 
         # Reversibilite hesaplama (ATS/ERS 2019)
-        if reversibility_positive is not None and level_type in (None, "Pre", "pre"):
+        if level_type in (None, "Pre", "pre"):
             raw_dicts = [dict(zip(cols, r)) for r in rows]
             rev_map = _compute_reversibility(conn, raw_dicts)
             filtered: list[CohortPatient] = []
@@ -392,9 +392,10 @@ def get_cohort(
                 elif reversibility_positive is None:
                     filtered.append(p)
             patients = filtered
-            total = len(patients)   # Filtre sonrası güncelle
-        elif level_type not in (None, "Pre", "pre"):
-            # Post seviyesinde reversibilite filtresi uygulanamaz
+            if reversibility_positive is not None:
+                total = len(patients)   # Filtre uygulandıysa güncelle
+        else:
+            # Post seviyesinde reversibilite hesaplanmaz
             for p in patients:
                 p.reversibility_positive = None
 
