@@ -1,0 +1,18 @@
+[run]
+source = .
+omit =
+    tests/*
+    mock_data_generator.py
+    htmlcov/*
+    setup.py
+
+[report]
+show_missing = True
+skip_empty = True
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pass
+    logger\.\w+\(

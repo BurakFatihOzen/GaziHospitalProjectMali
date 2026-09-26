@@ -170,6 +170,8 @@ class VyaireXMLParser:
     def parse(self) -> PatientDTO:
         patient_el = self._root.find("Patient")
         if patient_el is None:
+            patient_el = self._root.find(".//Patient")
+        if patient_el is None:
             raise ValueError("XML'de <Patient> elemanı bulunamadı.")
 
         dto = PatientDTO(
@@ -194,6 +196,8 @@ class VyaireXMLParser:
     # ------------------------------------------------------------------
     def _parse_visit(self, visit_tree_el: etree._Element) -> VisitDTO:
         visit_el = visit_tree_el.find("Visit")
+        if visit_el is None:
+            visit_el = visit_tree_el.find(".//Visit")
         if visit_el is None:
             return VisitDTO()
 
@@ -223,6 +227,8 @@ class VyaireXMLParser:
         self, level_tree_el: etree._Element, visit_dto: Optional[VisitDTO] = None
     ) -> LevelDTO:
         level_el = level_tree_el.find("Level")
+        if level_el is None:
+            level_el = level_tree_el.find(".//Level")
         dto = LevelDTO()
         if level_el is not None:
             dto.level_type       = level_el.get("Type", "")
