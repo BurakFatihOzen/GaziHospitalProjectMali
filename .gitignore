@@ -49,3 +49,10 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Test & Coverage
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.pytest_cache/

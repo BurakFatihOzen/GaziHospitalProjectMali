@@ -19,79 +19,115 @@ import argparse
 import math
 import random
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Optional
-from xml.etree import ElementTree as ET
 from xml.dom import minidom
+from xml.etree import ElementTree as ET
 
 # ---------------------------------------------------------------------------
 # SABIT PARAMETRE KÜTÜPHANESİ — Vyaire ParameterId'leri
 # ---------------------------------------------------------------------------
 PARAM_REGISTRY: list[dict] = [
-    {"id": 65537, "short": "VC IN ",  "long": "VC IN",           "unit": "ISO_LITER",       "unit_text": "Liter",   "pred_ref": None},
-    {"id": 65544, "short": "VC EX ",  "long": "VC EX",           "unit": "ISO_LITER",       "unit_text": "Liter",   "pred_ref": None},
-    {"id": 65545, "short": "VC MAX",  "long": "VC MAX",          "unit": "ISO_LITER",       "unit_text": "Liter",   "pred_ref": 219},
-    {"id": 65547, "short": "FEV1 ",   "long": "FEV 1",           "unit": "ISO_LITER",       "unit_text": "Liter",   "pred_ref": 44},
-    {"id": 65548, "short": "FEV1%P",  "long": "FEV 1 % Pred",    "unit": "ISO_PER_CENT",    "unit_text": "%",       "pred_ref": None},
-    {"id": 65551, "short": "FEV1%F",  "long": "FEV 1 % FVC",    "unit": "ISO_PER_CENT",    "unit_text": "%",       "pred_ref": 48},
-    {"id": 65567, "short": "FVC   ",  "long": "FVC",             "unit": "ISO_LITER",       "unit_text": "Liter",   "pred_ref": 42},
-    {"id": 65568, "short": "FVC%P ",  "long": "FVC % Pred",      "unit": "ISO_PER_CENT",    "unit_text": "%",       "pred_ref": None},
-    {"id": 65569, "short": "FET   ",  "long": "FET",             "unit": "ISO_S",           "unit_text": "sec",     "pred_ref": None},
-    {"id": 65573, "short": "PEF   ",  "long": "PEF",             "unit": "LITER_PER_SECOND","unit_text": "L/s",     "pred_ref": 33},
-    {"id": 65625, "short": "FEV6  ",  "long": "FEV 6",           "unit": "ISO_LITER",       "unit_text": "Liter",   "pred_ref": 202},
-    {"id": 65626, "short": "FEV1%6",  "long": "FEV 1 % FEV 6",  "unit": "ISO_PER_CENT",    "unit_text": "%",       "pred_ref": 203},
-    {"id": 65640, "short": "MFEF  ",  "long": "MFEF 75/25",      "unit": "LITER_PER_SECOND","unit_text": "L/s",     "pred_ref": 29},
-    {"id": 65669, "short": "FEF1s ",  "long": "Forced expiratory flow after 1 second",
-                                                                  "unit": "LITER_PER_SECOND","unit_text": "L/s",     "pred_ref": None},
+    {"id": 65537, "short": "VC IN ", "long": "VC IN", "unit": "ISO_LITER", "unit_text": "Liter", "pred_ref": None},
+    {"id": 65544, "short": "VC EX ", "long": "VC EX", "unit": "ISO_LITER", "unit_text": "Liter", "pred_ref": None},
+    {"id": 65545, "short": "VC MAX", "long": "VC MAX", "unit": "ISO_LITER", "unit_text": "Liter", "pred_ref": 219},
+    {"id": 65547, "short": "FEV1 ", "long": "FEV 1", "unit": "ISO_LITER", "unit_text": "Liter", "pred_ref": 44},
+    {
+        "id": 65548,
+        "short": "FEV1%P",
+        "long": "FEV 1 % Pred",
+        "unit": "ISO_PER_CENT",
+        "unit_text": "%",
+        "pred_ref": None,
+    },
+    {"id": 65551, "short": "FEV1%F", "long": "FEV 1 % FVC", "unit": "ISO_PER_CENT", "unit_text": "%", "pred_ref": 48},
+    {"id": 65567, "short": "FVC   ", "long": "FVC", "unit": "ISO_LITER", "unit_text": "Liter", "pred_ref": 42},
+    {"id": 65568, "short": "FVC%P ", "long": "FVC % Pred", "unit": "ISO_PER_CENT", "unit_text": "%", "pred_ref": None},
+    {"id": 65569, "short": "FET   ", "long": "FET", "unit": "ISO_S", "unit_text": "sec", "pred_ref": None},
+    {"id": 65573, "short": "PEF   ", "long": "PEF", "unit": "LITER_PER_SECOND", "unit_text": "L/s", "pred_ref": 33},
+    {"id": 65625, "short": "FEV6  ", "long": "FEV 6", "unit": "ISO_LITER", "unit_text": "Liter", "pred_ref": 202},
+    {
+        "id": 65626,
+        "short": "FEV1%6",
+        "long": "FEV 1 % FEV 6",
+        "unit": "ISO_PER_CENT",
+        "unit_text": "%",
+        "pred_ref": 203,
+    },
+    {
+        "id": 65640,
+        "short": "MFEF  ",
+        "long": "MFEF 75/25",
+        "unit": "LITER_PER_SECOND",
+        "unit_text": "L/s",
+        "pred_ref": 29,
+    },
+    {
+        "id": 65669,
+        "short": "FEF1s ",
+        "long": "Forced expiratory flow after 1 second",
+        "unit": "LITER_PER_SECOND",
+        "unit_text": "L/s",
+        "pred_ref": None,
+    },
 ]
 
 # Pediatrik yaş/boy/kilo aralıkları (çocuk alerji kliniği profili)
 PATIENT_PROFILES: list[dict] = [
     {
         "ext_id": "GU2024001",
-        "first": "Zeynep",  "last": "Kaya",
-        "birth_offset_years": 9,   # 9 yaş
+        "first": "Zeynep",
+        "last": "Kaya",
+        "birth_offset_years": 9,  # 9 yaş
         "gender": "Female",
-        "height_m": 1.33, "weight_kg": 28.5,
+        "height_m": 1.33,
+        "weight_kg": 28.5,
         "ethnic": "Caucasian",
-        "scenario": "mild_obstruction",   # FEV1 ~%72
+        "scenario": "mild_obstruction",  # FEV1 ~%72
     },
     {
         "ext_id": "GU2024002",
-        "first": "Ahmet",   "last": "Demir",
+        "first": "Ahmet",
+        "last": "Demir",
         "birth_offset_years": 12,
         "gender": "Male",
-        "height_m": 1.52, "weight_kg": 43.0,
+        "height_m": 1.52,
+        "weight_kg": 43.0,
         "ethnic": "Caucasian",
-        "scenario": "normal",             # FEV1 ~%98
+        "scenario": "normal",  # FEV1 ~%98
     },
     {
         "ext_id": "GU2024003",
-        "first": "Elif",    "last": "Yıldız",
+        "first": "Elif",
+        "last": "Yıldız",
         "birth_offset_years": 7,
         "gender": "Female",
-        "height_m": 1.22, "weight_kg": 22.0,
+        "height_m": 1.22,
+        "weight_kg": 22.0,
         "ethnic": "Caucasian",
-        "scenario": "severe_obstruction", # FEV1 ~%55, reversibilite pozitif
+        "scenario": "severe_obstruction",  # FEV1 ~%55, reversibilite pozitif
     },
     {
         "ext_id": "GU2024004",
-        "first": "Mert",    "last": "Çelik",
+        "first": "Mert",
+        "last": "Çelik",
         "birth_offset_years": 14,
         "gender": "Male",
-        "height_m": 1.68, "weight_kg": 58.0,
+        "height_m": 1.68,
+        "weight_kg": 58.0,
         "ethnic": "Caucasian",
-        "scenario": "borderline",         # FEV1 ~%80
+        "scenario": "borderline",  # FEV1 ~%80
     },
     {
         "ext_id": "GU2024005",
-        "first": "Sude",    "last": "Arslan",
+        "first": "Sude",
+        "last": "Arslan",
         "birth_offset_years": 11,
         "gender": "Female",
-        "height_m": 1.44, "weight_kg": 36.0,
+        "height_m": 1.44,
+        "weight_kg": 36.0,
         "ethnic": "Caucasian",
-        "scenario": "small_airway",       # MFEF düşük, FEV1 normal
+        "scenario": "small_airway",  # MFEF düşük, FEV1 normal
     },
 ]
 
@@ -118,11 +154,11 @@ def _build_scenario_params(
     fvc_pred = max(fvc_pred, 0.8)
 
     multipliers: dict[str, dict[str, float]] = {
-        "normal":            {"fev1_pct": 0.98, "fvc_pct": 1.00, "ratio": 83.5},
-        "mild_obstruction":  {"fev1_pct": 0.72, "fvc_pct": 0.90, "ratio": 72.0},
-        "severe_obstruction":{"fev1_pct": 0.55, "fvc_pct": 0.75, "ratio": 58.0},
-        "borderline":        {"fev1_pct": 0.80, "fvc_pct": 0.95, "ratio": 78.0},
-        "small_airway":      {"fev1_pct": 0.88, "fvc_pct": 0.97, "ratio": 80.0},
+        "normal": {"fev1_pct": 0.98, "fvc_pct": 1.00, "ratio": 83.5},
+        "mild_obstruction": {"fev1_pct": 0.72, "fvc_pct": 0.90, "ratio": 72.0},
+        "severe_obstruction": {"fev1_pct": 0.55, "fvc_pct": 0.75, "ratio": 58.0},
+        "borderline": {"fev1_pct": 0.80, "fvc_pct": 0.95, "ratio": 78.0},
+        "small_airway": {"fev1_pct": 0.88, "fvc_pct": 0.97, "ratio": 80.0},
     }
     m = multipliers.get(scenario, multipliers["normal"])
 
@@ -135,40 +171,40 @@ def _build_scenario_params(
 
     fev1_pct = min(m["fev1_pct"] + post_boost, 1.15)
 
-    fvc  = round(fvc_pred * m["fvc_pct"] + random.uniform(-0.05, 0.05), 3)
+    fvc = round(fvc_pred * m["fvc_pct"] + random.uniform(-0.05, 0.05), 3)
     fev1 = round(fvc_pred * fev1_pct + random.uniform(-0.03, 0.03), 4)
     ratio = round((fev1 / fvc) * 100 + random.uniform(-0.5, 0.5), 3)
-    pef  = round(fvc * 2.2 + random.uniform(-0.2, 0.2), 3)
+    pef = round(fvc * 2.2 + random.uniform(-0.2, 0.2), 3)
     fev6 = round(fvc * 0.998 + random.uniform(-0.01, 0.01), 4)
     mfef = round(fvc * 0.85 * m["fvc_pct"] + random.uniform(-0.1, 0.1), 4)
     vc_in = round(fvc * 1.01, 3)
     vc_ex = round(fvc * 0.999, 3)
     vc_max = round(max(vc_in, vc_ex), 3)
-    fet  = round(random.uniform(6.0, 9.0), 4)
+    fet = round(random.uniform(6.0, 9.0), 4)
     fef1s = round(fvc * 0.15 + random.uniform(-0.05, 0.05), 3)
 
     # % predicted değerleri (FEV1 ve FVC için)
     fev1_pred_pct = round(fev1_pct * 100, 2)
-    fvc_pred_pct  = round(m["fvc_pct"] * 100, 2)
+    fvc_pred_pct = round(m["fvc_pct"] * 100, 2)
 
     return {
-        "VC IN ":  vc_in,
-        "VC EX ":  vc_ex,
-        "VC MAX":  vc_max,
-        "FEV1 ":   fev1,
-        "FEV1%P":  fev1_pred_pct,
-        "FEV1%F":  ratio,
-        "FVC   ":  fvc,
-        "FVC%P ":  fvc_pred_pct,
-        "FET   ":  fet,
-        "PEF   ":  pef,
-        "FEV6  ":  fev6,
-        "FEV1%6":  round((fev1 / fev6) * 100, 4),
-        "MFEF  ":  mfef,
-        "FEF1s ":  fef1s,
+        "VC IN ": vc_in,
+        "VC EX ": vc_ex,
+        "VC MAX": vc_max,
+        "FEV1 ": fev1,
+        "FEV1%P": fev1_pred_pct,
+        "FEV1%F": ratio,
+        "FVC   ": fvc,
+        "FVC%P ": fvc_pred_pct,
+        "FET   ": fet,
+        "PEF   ": pef,
+        "FEV6  ": fev6,
+        "FEV1%6": round((fev1 / fev6) * 100, 4),
+        "MFEF  ": mfef,
+        "FEF1s ": fef1s,
         # Özel alanlara açık erişim için
         "_fev1_pred_pct": fev1_pred_pct,
-        "_fvc_pred_pct":  fvc_pred_pct,
+        "_fvc_pred_pct": fvc_pred_pct,
     }
 
 
@@ -268,12 +304,10 @@ def _add_parameter(
     value: float,
     store_unit: str,
     unit_text: str,
-    pred_ref: Optional[int] = None,
+    pred_ref: int | None = None,
 ) -> None:
     """trial/Parameters altına bir <Parameter> elemanı ekler."""
-    p = ET.SubElement(parent, "Parameter",
-                      ParameterId=str(param_id),
-                      ShortName=short_name)
+    p = ET.SubElement(parent, "Parameter", ParameterId=str(param_id), ShortName=short_name)
     ET.SubElement(p, "LongName").text = long_name
     if pred_ref is not None:
         ET.SubElement(p, "PredictedReference").text = str(pred_ref)
@@ -331,8 +365,8 @@ def _build_trial_element(
 ) -> None:
     """Tek bir <Trial> elemanı oluşturur (parametreler + eğriler)."""
     params = _build_scenario_params(scenario, is_post, height_m, age)
-    fvc  = params["FVC   "]
-    pef  = params["PEF   "]
+    fvc = params["FVC   "]
+    pef = params["PEF   "]
 
     trial_el = ET.SubElement(trials_el, "Trial", Number=str(trial_number))
     ET.SubElement(trial_el, "Status").text = "None" if trial_number == 0 else "Valid"
@@ -342,7 +376,7 @@ def _build_trial_element(
     params_el = ET.SubElement(trial_el, "Parameters")
     for preg in PARAM_REGISTRY:
         short = preg["short"]
-        val   = params.get(short)
+        val = params.get(short)
         if val is None:
             continue
         _add_parameter(
@@ -357,17 +391,13 @@ def _build_trial_element(
         )
 
     # --- ReportCurveData Eğrileri ---
-    report_curves_el = ET.SubElement(
-        ET.SubElement(trial_el, "ReportCurveData"), "Curves"
-    )
+    report_curves_el = ET.SubElement(ET.SubElement(trial_el, "ReportCurveData"), "Curves")
 
     xs_ex, ys_ex = _generate_fvc_ex_curve(fvc, pef, n_points=118)
-    _add_curve(report_curves_el, "TYPE_FVC_EX", "SpirFvc",
-               xs_ex, ys_ex, "ml", "ml/s", "40 ml")
+    _add_curve(report_curves_el, "TYPE_FVC_EX", "SpirFvc", xs_ex, ys_ex, "ml", "ml/s", "40 ml")
 
     xs_in, ys_in = _generate_fvc_in_curve(fvc, n_points=118)
-    _add_curve(report_curves_el, "TYPE_FVC_IN", "SpirFvc",
-               xs_in, ys_in, "ml", "ml/s", "40 ml")
+    _add_curve(report_curves_el, "TYPE_FVC_IN", "SpirFvc", xs_in, ys_in, "ml", "ml/s", "40 ml")
 
 
 def build_patient_xml(profile: dict, visit_date: datetime) -> ET.Element:
@@ -388,32 +418,31 @@ def build_patient_xml(profile: dict, visit_date: datetime) -> ET.Element:
     # Hasta bilgileri
     patient_el = ET.SubElement(root, "Patient")
     ET.SubElement(patient_el, "ExternalId").text = profile["ext_id"]
-    ET.SubElement(patient_el, "LastName").text   = profile["last"]
-    ET.SubElement(patient_el, "FirstName").text  = profile["first"]
+    ET.SubElement(patient_el, "LastName").text = profile["last"]
+    ET.SubElement(patient_el, "FirstName").text = profile["first"]
 
     birth_dt = visit_date - timedelta(days=365 * profile["birth_offset_years"] + 180)
     ET.SubElement(patient_el, "Birthdate").text = birth_dt.strftime("%Y-%m-%dT00:00:00Z")
 
-    race = ET.SubElement(patient_el, "RaceInformation",
-                         EthnicGroupId="1", Name=profile["ethnic"])
+    race = ET.SubElement(patient_el, "RaceInformation", EthnicGroupId="1", Name=profile["ethnic"])
     ET.SubElement(race, "EthnicGroup").text = profile["ethnic"]
 
     # Ziyaret ağacı
     visit_trees = ET.SubElement(root, "VisitTrees")
-    visit_tree  = ET.SubElement(visit_trees, "VisitTree")
+    visit_tree = ET.SubElement(visit_trees, "VisitTree")
 
     local_date_str = visit_date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
-    utc_date_str   = (visit_date - timedelta(hours=3)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    utc_date_str = (visit_date - timedelta(hours=3)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
     visit_el = ET.SubElement(visit_tree, "Visit", LocalDate=local_date_str)
-    ET.SubElement(visit_el, "Age").text              = str(profile["birth_offset_years"])
-    ET.SubElement(visit_el, "Gender").text           = profile["gender"]
+    ET.SubElement(visit_el, "Age").text = str(profile["birth_offset_years"])
+    ET.SubElement(visit_el, "Gender").text = profile["gender"]
     ET.SubElement(visit_el, "BiologicalGender").text = profile["gender"]
-    ET.SubElement(visit_el, "ReviewStatus").text     = "4"
-    ET.SubElement(visit_el, "Height").text           = str(profile["height_m"])
-    ET.SubElement(visit_el, "Weight").text           = str(profile["weight_kg"])
-    ET.SubElement(visit_el, "PredModuleName").text   = "GLI 2012"
-    ET.SubElement(visit_el, "UtcDate").text          = utc_date_str
+    ET.SubElement(visit_el, "ReviewStatus").text = "4"
+    ET.SubElement(visit_el, "Height").text = str(profile["height_m"])
+    ET.SubElement(visit_el, "Weight").text = str(profile["weight_kg"])
+    ET.SubElement(visit_el, "PredModuleName").text = "GLI 2012"
+    ET.SubElement(visit_el, "UtcDate").text = utc_date_str
 
     operator = ET.SubElement(visit_el, "Operator")
     ET.SubElement(operator, "Name").text = "Lab Teknisyeni"
@@ -426,22 +455,19 @@ def build_patient_xml(profile: dict, visit_date: datetime) -> ET.Element:
 
     # PRE seviyesi
     for level_cfg in [
-        {"type": "Pre",  "seq": 1, "is_post": False},
+        {"type": "Pre", "seq": 1, "is_post": False},
         {"type": "Post", "seq": 2, "is_post": True},
     ]:
         level_tree = ET.SubElement(levels_el, "LevelTree")
-        ET.SubElement(level_tree, "Level",
-                      Type=level_cfg["type"],
-                      Sequence=str(level_cfg["seq"]),
-                      PatientPosition="Sitting")
+        ET.SubElement(
+            level_tree, "Level", Type=level_cfg["type"], Sequence=str(level_cfg["seq"]), PatientPosition="Sitting"
+        )
 
         measurements_el = ET.SubElement(level_tree, "Measurements")
-        meas_el = ET.SubElement(measurements_el, "Measurement",
-                                MeasurementType="Spirometry",
-                                Status="None")
+        meas_el = ET.SubElement(measurements_el, "Measurement", MeasurementType="Spirometry", Status="None")
         ET.SubElement(meas_el, "Duration").text = str(round(random.uniform(90, 120), 0))
         ET.SubElement(meas_el, "SoftwareVersionOriginal").text = "SentrySuite 3.3"
-        ET.SubElement(meas_el, "SoftwareVersionActual").text   = "SentrySuite 3.3"
+        ET.SubElement(meas_el, "SoftwareVersionActual").text = "SentrySuite 3.3"
         meas_local = visit_date + timedelta(minutes=level_cfg["seq"] * 5)
         ET.SubElement(meas_el, "LocalDate").text = meas_local.strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
@@ -456,7 +482,8 @@ def build_patient_xml(profile: dict, visit_date: datetime) -> ET.Element:
         # Trial 0 = Best, Trial 1 ve 2 = bireysel denemeler
         for tn in [0, 1, 2]:
             _build_trial_element(
-                trials_el, tn,
+                trials_el,
+                tn,
                 profile["scenario"],
                 level_cfg["is_post"],
                 profile["height_m"],
@@ -505,9 +532,11 @@ def generate_mock_xmls(output_dir: Path, count: int, seed: int = 42) -> None:
         out_path = output_dir / filename
         out_path.write_text(xml_str, encoding="utf-8")
 
-        print(f"[{i+1}/{count}] Oluşturuldu: {out_path.name}  "
-              f"| Senaryo: {profile['scenario']:<18} "
-              f"| Yaş: {profile['birth_offset_years']}")
+        print(
+            f"[{i + 1}/{count}] Oluşturuldu: {out_path.name}  "
+            f"| Senaryo: {profile['scenario']:<18} "
+            f"| Yaş: {profile['birth_offset_years']}"
+        )
 
     print(f"\n[OK] {count} adet sentetik XML '{output_dir}' dizinine yazildi.")
 
@@ -521,13 +550,15 @@ def main() -> None:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "--output-dir", "-o",
+        "--output-dir",
+        "-o",
         type=Path,
         default=Path("./mock_xmls"),
         help="Üretilen XML dosyalarının yazılacağı dizin",
     )
     parser.add_argument(
-        "--count", "-n",
+        "--count",
+        "-n",
         type=int,
         default=5,
         choices=range(1, 6),

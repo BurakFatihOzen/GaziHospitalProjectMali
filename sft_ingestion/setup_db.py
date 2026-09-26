@@ -14,16 +14,17 @@ Veritabanı Hazırlama ve Şema Kurulum Betiği
 """
 
 import os
-import sys
 import pathlib
+import sys
 import urllib.parse
+
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 # UTF-8 stdout yapılandırması
-if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     try:
-        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
 
@@ -36,7 +37,7 @@ SCHEMA_PATH = SCRIPT_DIR / "sql" / "init_schema.sql"
 def load_env() -> None:
     """sft_ingestion/.env dosyasını ortam değişkenlerine yükler."""
     if ENV_PATH.exists():
-        with open(ENV_PATH, "r", encoding="utf-8") as f:
+        with open(ENV_PATH, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line and not line.startswith("#") and "=" in line:
@@ -81,7 +82,7 @@ def ensure_database_exists(db_params: dict) -> None:
 
         if not exists:
             print(f"[*] '{target_db}' veritabani bulunamadi. Olusturuluyor...")
-            cur.execute(f'CREATE DATABASE "{target_db}" WITH ENCODING = \'UTF8\';')
+            cur.execute(f"CREATE DATABASE \"{target_db}\" WITH ENCODING = 'UTF8';")
             print(f"[OK] '{target_db}' veritabani basariyla olusturuldu.")
         else:
             print(f"[BILGI] '{target_db}' veritabani zaten mevcut.")
@@ -97,7 +98,7 @@ def apply_schema(db_params: dict) -> None:
         raise FileNotFoundError(f"Sema dosyasi bulunamadi: {SCHEMA_PATH}")
 
     print(f"[*] '{SCHEMA_PATH.name}' okunuyor...")
-    with open(SCHEMA_PATH, "r", encoding="utf-8") as f:
+    with open(SCHEMA_PATH, encoding="utf-8") as f:
         schema_sql = f.read()
 
     print(f"[*] '{target_db}' veritabanina sema uygulaniyor...")
@@ -107,7 +108,7 @@ def apply_schema(db_params: dict) -> None:
     try:
         cur.execute(schema_sql)
         conn.commit()
-        print(f"[OK] Sema basariyla uygulandi.")
+        print("[OK] Sema basariyla uygulandi.")
 
         # Doğrulama: Tabloları listele
         cur.execute("""

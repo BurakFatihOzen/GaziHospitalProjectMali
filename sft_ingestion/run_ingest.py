@@ -34,25 +34,23 @@ import logging
 import sys
 
 # Windows cp1254 terminal için UTF-8 desteği
-if sys.stdout.encoding and sys.stdout.encoding.lower() != 'utf-8':
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     try:
-        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
 
 import traceback
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 import psycopg2
 
 from parser import (
-    VyaireXMLParser,
     DBWriter,
+    VyaireXMLParser,
     get_connection,
-    PARSER_VERSION,
 )
 
 # ---------------------------------------------------------------------------
@@ -73,22 +71,22 @@ logger = logging.getLogger("sft.ingest")
 class FileResult:
     filename: str
     sha256: str
-    status: str          # SUCCESS | SKIPPED_DUPLICATE | FAILED_QUARANTINE
-    patient_external_id: Optional[str] = None
-    patient_db_id: Optional[int]       = None
-    error_message: Optional[str]       = None
-    duration_ms: float                 = 0.0
+    status: str  # SUCCESS | SKIPPED_DUPLICATE | FAILED_QUARANTINE
+    patient_external_id: str | None = None
+    patient_db_id: int | None = None
+    error_message: str | None = None
+    duration_ms: float = 0.0
 
 
 @dataclass
 class IngestionSummary:
-    started_at: str       = ""
-    finished_at: str      = ""
-    input_dir: str        = ""
-    total_files: int      = 0
-    success: int          = 0
+    started_at: str = ""
+    finished_at: str = ""
+    input_dir: str = ""
+    total_files: int = 0
+    success: int = 0
     skipped_duplicates: int = 0
-    failed: int           = 0
+    failed: int = 0
     results: list[FileResult] = field(default_factory=list)
 
 
@@ -146,13 +144,13 @@ def ingest_file(
         return result
 
     # --- Source Document Kaydı Oluştur ---
-    doc_id: Optional[int] = None
+    doc_id: int | None = None
     try:
         doc_id = writer.create_source_document(
             sha256=sha256,
             original_name=path.name,
         )
-        conn.commit()   # Source document satırı güvenceye alındı
+        conn.commit()  # Source document satırı güvenceye alındı
     except psycopg2.errors.UniqueViolation:
         conn.rollback()
         logger.warning("  ↳ [ATLA] Race condition — SHA-256 zaten eklendi: %s", path.name)
@@ -164,17 +162,17 @@ def ingest_file(
     # --- XML Ayrıştırma + Veritabanı Yazma (Tek Transaction) ---
     try:
         raw_bytes = path.read_bytes()
-        parser    = VyaireXMLParser(raw_bytes)
+        parser = VyaireXMLParser(raw_bytes)
         patient_dto = parser.parse()
 
         # Atomik transaction başlat
-        with conn:   # psycopg2 context manager: başarıda commit, hata da rollback
+        with conn:  # psycopg2 context manager: başarıda commit, hata da rollback
             patient_id = writer.write_patient_tree(patient_dto, doc_id)
             writer.update_source_document_status(doc_id, "SUCCESS")
 
-        result.status             = "SUCCESS"
+        result.status = "SUCCESS"
         result.patient_external_id = patient_dto.external_id
-        result.patient_db_id      = patient_id
+        result.patient_db_id = patient_id
 
         logger.info(
             "  ↳ [OK] %s | Hasta: %s (%s) | %d ziyaret",
@@ -197,7 +195,7 @@ def ingest_file(
         except Exception:
             conn.rollback()
 
-        result.status        = "FAILED_QUARANTINE"
+        result.status = "FAILED_QUARANTINE"
         result.error_message = error_msg
 
     t_end = datetime.now(tz=timezone.utc)
@@ -304,7 +302,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     p.add_argument(
-        "--input-dir", "-i",
+        "--input-dir",
+        "-i",
         type=Path,
         required=True,
         help="İşlenecek XML dosyalarının bulunduğu dizin",
@@ -314,10 +313,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=str,
         default=None,
         help="PostgreSQL DSN (örn: postgresql://user:pass@host:5432/db). "
-             "Belirtilmezse DATABASE_URL ortam değişkeni kullanılır.",
+        "Belirtilmezse DATABASE_URL ortam değişkeni kullanılır.",
     )
     p.add_argument(
-        "--recursive", "-r",
+        "--recursive",
+        "-r",
         action="store_true",
         default=False,
         help="Alt dizinleri de tara",
@@ -379,7 +379,7 @@ def main() -> int:
     try:
         summary = ingest_directory(
             input_dir=args.input_dir,
-            conn=conn,       # type: ignore[arg-type]
+            conn=conn,  # type: ignore[arg-type]
             recursive=args.recursive,
             dry_run=args.dry_run,
             file_pattern=args.pattern,

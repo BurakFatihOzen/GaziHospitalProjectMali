@@ -24,20 +24,21 @@ import io
 import logging
 import os
 import traceback
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
-from typing import Any, AsyncGenerator, Optional
+from typing import Any
 
 import psycopg2
 import psycopg2.extras
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from parser import DBWriter, VyaireXMLParser
 
@@ -58,6 +59,7 @@ DATABASE_URL: str = os.environ.get(
     "postgresql://postgres:postgres@localhost:5432/sft_db",
 )
 
+
 # ---------------------------------------------------------------------------
 # VERİTABANI BAĞLANTI YÖNETİCİSİ
 # ---------------------------------------------------------------------------
@@ -73,28 +75,29 @@ def _get_conn() -> psycopg2.extensions.connection:
 # ---------------------------------------------------------------------------
 class CohortPatient(BaseModel):
     """mv_spirometry_best_trial'dan gelen tek bir kayıt."""
+
     patient_id: int
     external_id: str
-    first_name: Optional[str]
-    last_name: Optional[str]
-    birth_date: Optional[str]          # ISO 8601 string
-    ethnic_group: Optional[str]
+    first_name: str | None
+    last_name: str | None
+    birth_date: str | None  # ISO 8601 string
+    ethnic_group: str | None
     visit_id: int
-    visit_datetime: Optional[str]
-    age: Optional[int]
-    biological_gender: Optional[str]
-    height_m: Optional[float]
-    weight_kg: Optional[float]
-    prediction_module: Optional[str]
-    level_type: str                    # 'Pre' | 'Post'
+    visit_datetime: str | None
+    age: int | None
+    biological_gender: str | None
+    height_m: float | None
+    weight_kg: float | None
+    prediction_module: str | None
+    level_type: str  # 'Pre' | 'Post'
     trial_id: int
-    fev1_val: Optional[float]
-    fvc_val: Optional[float]
-    fev1_fvc_ratio: Optional[float]
-    pef_val: Optional[float]
-    fev1_pred_percent: Optional[float]
-    fvc_pred_percent: Optional[float]
-    reversibility_positive: Optional[bool] = None  # API katmanında hesaplanır
+    fev1_val: float | None
+    fvc_val: float | None
+    fev1_fvc_ratio: float | None
+    pef_val: float | None
+    fev1_pred_percent: float | None
+    fvc_pred_percent: float | None
+    reversibility_positive: bool | None = None  # API katmanında hesaplanır
 
 
 class CohortResponse(BaseModel):
@@ -129,10 +132,10 @@ class CurvesResponse(BaseModel):
 class UploadResult(BaseModel):
     filename: str
     sha256: str
-    status: str                        # SUCCESS | SKIPPED_DUPLICATE | FAILED_QUARANTINE
-    patient_external_id: Optional[str]
-    patient_db_id: Optional[int]
-    error_message: Optional[str]
+    status: str  # SUCCESS | SKIPPED_DUPLICATE | FAILED_QUARANTINE
+    patient_external_id: str | None
+    patient_db_id: int | None
+    error_message: str | None
     duration_ms: float
 
 
@@ -185,14 +188,14 @@ app.add_middleware(
 # YARDIMCI: Dinamik WHERE cümlesi oluşturucu (SQL Injection korumalı)
 # ---------------------------------------------------------------------------
 def _build_cohort_where(
-    min_age: Optional[int],
-    max_age: Optional[int],
-    gender: Optional[str],
-    min_fev1_pred: Optional[float],
-    max_fev1_pred: Optional[float],
-    min_fvc_pred: Optional[float],
-    max_fvc_pred: Optional[float],
-    level_type: Optional[str],
+    min_age: int | None,
+    max_age: int | None,
+    gender: str | None,
+    min_fev1_pred: float | None,
+    max_fev1_pred: float | None,
+    min_fvc_pred: float | None,
+    max_fvc_pred: float | None,
+    level_type: str | None,
 ) -> tuple[str, list[Any]]:
     """
     Verilen filtrelerden güvenli parametrik WHERE cümlesi üretir.
@@ -280,7 +283,7 @@ def _compute_reversibility(
          WHERE level_type = 'Post'
            AND patient_id = ANY(%s)
     """
-    post_map: dict[tuple[int, int], dict] = {}   # (patient_id, visit_id) -> row
+    post_map: dict[tuple[int, int], dict] = {}  # (patient_id, visit_id) -> row
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute(sql, (patient_ids,))
         for pr in cur.fetchall():
@@ -294,9 +297,9 @@ def _compute_reversibility(
         post = post_map.get(key)
         if pre_fev1 and post and post.get("fev1_val"):
             post_fev1 = post["fev1_val"]
-            delta_l   = post_fev1 - pre_fev1
+            delta_l = post_fev1 - pre_fev1
             pct_change = (delta_l / pre_fev1) * 100 if pre_fev1 > 0 else 0
-            result[row["trial_id"]] = (delta_l >= 0.2 and pct_change >= 12.0)
+            result[row["trial_id"]] = delta_l >= 0.2 and pct_change >= 12.0
         else:
             result[row["trial_id"]] = False
 
@@ -313,17 +316,17 @@ def _compute_reversibility(
     tags=["Klinik Sorgulama"],
 )
 def get_cohort(
-    min_age: Optional[int]   = Query(None, ge=0, le=18, description="Minimum yaş (dahil)"),
-    max_age: Optional[int]   = Query(None, ge=0, le=18, description="Maksimum yaş (dahil)"),
-    gender: Optional[str]    = Query(None, description="Cinsiyet: Male | Female"),
-    min_fev1_pred: Optional[float] = Query(None, ge=0, le=200, description="FEV1 %Pred minimum"),
-    max_fev1_pred: Optional[float] = Query(None, ge=0, le=200, description="FEV1 %Pred maksimum"),
-    min_fvc_pred: Optional[float]  = Query(None, ge=0, le=200, description="FVC %Pred minimum"),
-    max_fvc_pred: Optional[float]  = Query(None, ge=0, le=200, description="FVC %Pred maksimum"),
-    reversibility_positive: Optional[bool] = Query(None, description="Bronkodilatör reversibilitesi pozitif mi?"),
-    level_type: Optional[str] = Query("Pre", description="Ölçüm seviyesi: Pre | Post"),
-    limit: int  = Query(200, ge=1, le=2000, description="Maksimum kayıt sayısı"),
-    offset: int = Query(0,   ge=0,          description="Sayfalama başlangıcı"),
+    min_age: int | None = Query(None, ge=0, le=18, description="Minimum yaş (dahil)"),
+    max_age: int | None = Query(None, ge=0, le=18, description="Maksimum yaş (dahil)"),
+    gender: str | None = Query(None, description="Cinsiyet: Male | Female"),
+    min_fev1_pred: float | None = Query(None, ge=0, le=200, description="FEV1 %Pred minimum"),
+    max_fev1_pred: float | None = Query(None, ge=0, le=200, description="FEV1 %Pred maksimum"),
+    min_fvc_pred: float | None = Query(None, ge=0, le=200, description="FVC %Pred minimum"),
+    max_fvc_pred: float | None = Query(None, ge=0, le=200, description="FVC %Pred maksimum"),
+    reversibility_positive: bool | None = Query(None, description="Bronkodilatör reversibilitesi pozitif mi?"),
+    level_type: str | None = Query("Pre", description="Ölçüm seviyesi: Pre | Post"),
+    limit: int = Query(200, ge=1, le=2000, description="Maksimum kayıt sayısı"),
+    offset: int = Query(0, ge=0, description="Sayfalama başlangıcı"),
 ) -> CohortResponse:
     """
     `mv_spirometry_best_trial` materialized view üzerinden dinamik
@@ -333,9 +336,13 @@ def get_cohort(
     Reversibilite filtresi Python katmanında Pre/Post karşılaştırmasıyla hesaplanır.
     """
     where_clause, params = _build_cohort_where(
-        min_age, max_age, gender,
-        min_fev1_pred, max_fev1_pred,
-        min_fvc_pred, max_fvc_pred,
+        min_age,
+        max_age,
+        gender,
+        min_fev1_pred,
+        max_fev1_pred,
+        min_fvc_pred,
+        max_fvc_pred,
         level_type,
     )
 
@@ -358,13 +365,27 @@ def get_cohort(
     count_sql = f"SELECT COUNT(*) FROM mv_spirometry_best_trial {where_clause}"
 
     cols = [
-        "patient_id", "external_id", "first_name", "last_name",
-        "birth_date", "ethnic_group",
-        "visit_id", "visit_datetime", "age", "biological_gender",
-        "height_m", "weight_kg", "prediction_module",
-        "level_type", "trial_id",
-        "fev1_val", "fvc_val", "fev1_fvc_ratio", "pef_val",
-        "fev1_pred_percent", "fvc_pred_percent",
+        "patient_id",
+        "external_id",
+        "first_name",
+        "last_name",
+        "birth_date",
+        "ethnic_group",
+        "visit_id",
+        "visit_datetime",
+        "age",
+        "biological_gender",
+        "height_m",
+        "weight_kg",
+        "prediction_module",
+        "level_type",
+        "trial_id",
+        "fev1_val",
+        "fvc_val",
+        "fev1_fvc_ratio",
+        "pef_val",
+        "fev1_pred_percent",
+        "fvc_pred_percent",
     ]
 
     conn = _get_conn()
@@ -385,28 +406,38 @@ def get_cohort(
             for p in patients:
                 rev = rev_map.get(p.trial_id, False)
                 p.reversibility_positive = rev
-                if reversibility_positive is True and rev:
-                    filtered.append(p)
-                elif reversibility_positive is False and not rev:
-                    filtered.append(p)
-                elif reversibility_positive is None:
+                if (
+                    reversibility_positive is True
+                    and rev
+                    or reversibility_positive is False
+                    and not rev
+                    or reversibility_positive is None
+                ):
                     filtered.append(p)
             patients = filtered
             if reversibility_positive is not None:
-                total = len(patients)   # Filtre uygulandıysa güncelle
+                total = len(patients)  # Filtre uygulandıysa güncelle
         else:
             # Post seviyesinde reversibilite hesaplanmaz
             for p in patients:
                 p.reversibility_positive = None
 
         applied: dict[str, Any] = {
-            k: v for k, v in {
-                "min_age": min_age, "max_age": max_age, "gender": gender,
-                "min_fev1_pred": min_fev1_pred, "max_fev1_pred": max_fev1_pred,
-                "min_fvc_pred": min_fvc_pred, "max_fvc_pred": max_fvc_pred,
+            k: v
+            for k, v in {
+                "min_age": min_age,
+                "max_age": max_age,
+                "gender": gender,
+                "min_fev1_pred": min_fev1_pred,
+                "max_fev1_pred": max_fev1_pred,
+                "min_fvc_pred": min_fvc_pred,
+                "max_fvc_pred": max_fvc_pred,
                 "reversibility_positive": reversibility_positive,
-                "level_type": level_type, "limit": limit, "offset": offset,
-            }.items() if v is not None
+                "level_type": level_type,
+                "limit": limit,
+                "offset": offset,
+            }.items()
+            if v is not None
         }
 
         return CohortResponse(total=total, filters_applied=applied, results=patients)
@@ -433,23 +464,27 @@ def get_cohort(
     response_class=StreamingResponse,
 )
 def export_cohort(
-    min_age: Optional[int]   = Query(None, ge=0, le=18),
-    max_age: Optional[int]   = Query(None, ge=0, le=18),
-    gender: Optional[str]    = Query(None),
-    min_fev1_pred: Optional[float] = Query(None, ge=0, le=200),
-    max_fev1_pred: Optional[float] = Query(None, ge=0, le=200),
-    min_fvc_pred: Optional[float]  = Query(None, ge=0, le=200),
-    max_fvc_pred: Optional[float]  = Query(None, ge=0, le=200),
-    level_type: Optional[str] = Query("Pre"),
+    min_age: int | None = Query(None, ge=0, le=18),
+    max_age: int | None = Query(None, ge=0, le=18),
+    gender: str | None = Query(None),
+    min_fev1_pred: float | None = Query(None, ge=0, le=200),
+    max_fev1_pred: float | None = Query(None, ge=0, le=200),
+    min_fvc_pred: float | None = Query(None, ge=0, le=200),
+    max_fvc_pred: float | None = Query(None, ge=0, le=200),
+    level_type: str | None = Query("Pre"),
 ) -> StreamingResponse:
     """
     Kohort sorgusundaki aynı filtrelerle veritabanından çekilen sonuçları
     klinik sütun başlıklarıyla biçimlendirilmiş `.xlsx` olarak döndürür.
     """
     where_clause, params = _build_cohort_where(
-        min_age, max_age, gender,
-        min_fev1_pred, max_fev1_pred,
-        min_fvc_pred, max_fvc_pred,
+        min_age,
+        max_age,
+        gender,
+        min_fev1_pred,
+        max_fev1_pred,
+        min_fvc_pred,
+        max_fvc_pred,
         level_type,
     )
 
@@ -468,11 +503,23 @@ def export_cohort(
 
     # Klinik sütun başlıkları (Türkçe)
     HEADERS = [
-        "Protokol No", "Ad", "Soyad", "Doğum Tarihi", "Test Yaşı",
-        "Cinsiyet", "Boy (m)", "Kilo (kg)", "Referans Modülü",
-        "Seviye (Pre/Post)", "Test Tarihi",
-        "FEV1 (L)", "FVC (L)", "FEV1/FVC (%)", "PEF (L/s)",
-        "FEV1 %Pred", "FVC %Pred",
+        "Protokol No",
+        "Ad",
+        "Soyad",
+        "Doğum Tarihi",
+        "Test Yaşı",
+        "Cinsiyet",
+        "Boy (m)",
+        "Kilo (kg)",
+        "Referans Modülü",
+        "Seviye (Pre/Post)",
+        "Test Tarihi",
+        "FEV1 (L)",
+        "FVC (L)",
+        "FEV1/FVC (%)",
+        "PEF (L/s)",
+        "FEV1 %Pred",
+        "FVC %Pred",
     ]
 
     conn = _get_conn()
@@ -495,23 +542,23 @@ def export_cohort(
     ws.title = "SFT Kohort Raporu"
 
     # Başlık satırı biçimlendirmesi
-    HEADER_FILL   = PatternFill("solid", fgColor="003366")   # Gazi Lacivert
-    HEADER_FONT   = Font(bold=True, color="FFFFFF", size=11)
-    HEADER_ALIGN  = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    DATA_FONT     = Font(size=10)
-    DATA_ALIGN    = Alignment(horizontal="left", vertical="center")
-    ALT_FILL      = PatternFill("solid", fgColor="EEF2F7")   # Açık mavi-gri
+    HEADER_FILL = PatternFill("solid", fgColor="003366")  # Gazi Lacivert
+    HEADER_FONT = Font(bold=True, color="FFFFFF", size=11)
+    HEADER_ALIGN = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    DATA_FONT = Font(size=10)
+    DATA_ALIGN = Alignment(horizontal="left", vertical="center")
+    ALT_FILL = PatternFill("solid", fgColor="EEF2F7")  # Açık mavi-gri
 
     ws.row_dimensions[1].height = 32
     for col_idx, header in enumerate(HEADERS, start=1):
         cell = ws.cell(row=1, column=col_idx, value=header)
-        cell.fill   = HEADER_FILL
-        cell.font   = HEADER_FONT
+        cell.fill = HEADER_FILL
+        cell.font = HEADER_FONT
         cell.alignment = HEADER_ALIGN
 
     # Veri satırları
     for row_idx, row in enumerate(rows, start=2):
-        is_alt = (row_idx % 2 == 0)
+        is_alt = row_idx % 2 == 0
         for col_idx, val in enumerate(row, start=1):
             # datetime / date -> string dönüşümü
             if hasattr(val, "isoformat"):
@@ -537,12 +584,25 @@ def export_cohort(
         ("Üretim Tarihi", datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M UTC")),
         ("Toplam Kayıt", len(rows)),
         ("Referans", "mv_spirometry_best_trial"),
-        ("Filtreler", str({k: v for k, v in {
-            "min_age": min_age, "max_age": max_age, "gender": gender,
-            "min_fev1_pred": min_fev1_pred, "max_fev1_pred": max_fev1_pred,
-            "min_fvc_pred": min_fvc_pred, "max_fvc_pred": max_fvc_pred,
-            "level_type": level_type,
-        }.items() if v is not None})),
+        (
+            "Filtreler",
+            str(
+                {
+                    k: v
+                    for k, v in {
+                        "min_age": min_age,
+                        "max_age": max_age,
+                        "gender": gender,
+                        "min_fev1_pred": min_fev1_pred,
+                        "max_fev1_pred": max_fev1_pred,
+                        "min_fvc_pred": min_fvc_pred,
+                        "max_fvc_pred": max_fvc_pred,
+                        "level_type": level_type,
+                    }.items()
+                    if v is not None
+                }
+            ),
+        ),
     ]
     for mr in meta_rows:
         ws_meta.append(mr)
@@ -553,7 +613,7 @@ def export_cohort(
     buf.seek(0)
 
     timestamp = datetime.now(tz=timezone.utc).strftime("%Y%m%d_%H%M")
-    filename  = f"GaziSFT_Kohort_{timestamp}.xlsx"
+    filename = f"GaziSFT_Kohort_{timestamp}.xlsx"
 
     return StreamingResponse(
         buf,
@@ -576,7 +636,7 @@ def export_cohort(
 )
 def get_curves(
     trial_id: int,
-    scope: Optional[str] = Query(
+    scope: str | None = Query(
         "REPORT",
         description="Eğri kapsamı: REPORT (görselleştirme ~200 pt) | RAW (arşiv 250 Hz) | ALL",
     ),
@@ -653,18 +713,20 @@ def get_curves(
         n = min(len(xs), len(ys))
         points = [CurvePoint(x=xs[i], y=ys[i]) for i in range(n)]
 
-        curve_groups.append(CurveGroup(
-            curve_id   = row["curve_id"],
-            trial_id   = row["trial_id"],
-            curve_type = row["curve_type"] or "",
-            curve_scope= row["curve_scope"] or "",
-            data_type  = row["data_type"],
-            x_unit     = row["x_unit"],
-            y_unit     = row["y_unit"],
-            sample_rate= row["sample_rate"],
-            point_count= len(points),
-            points     = points,
-        ))
+        curve_groups.append(
+            CurveGroup(
+                curve_id=row["curve_id"],
+                trial_id=row["trial_id"],
+                curve_type=row["curve_type"] or "",
+                curve_scope=row["curve_scope"] or "",
+                data_type=row["data_type"],
+                x_unit=row["x_unit"],
+                y_unit=row["y_unit"],
+                sample_rate=row["sample_rate"],
+                point_count=len(points),
+                points=points,
+            )
+        )
 
     return CurvesResponse(trial_id=trial_id, curves=curve_groups)
 
@@ -698,12 +760,17 @@ async def upload_xml(
 
         # Sadece .xml dosyalarına izin ver
         if not filename.lower().endswith(".xml"):
-            results.append(UploadResult(
-                filename=filename, sha256="", status="FAILED_QUARANTINE",
-                patient_external_id=None, patient_db_id=None,
-                error_message="Desteklenmeyen dosya türü: yalnızca .xml kabul edilir.",
-                duration_ms=0.0,
-            ))
+            results.append(
+                UploadResult(
+                    filename=filename,
+                    sha256="",
+                    status="FAILED_QUARANTINE",
+                    patient_external_id=None,
+                    patient_db_id=None,
+                    error_message="Desteklenmeyen dosya türü: yalnızca .xml kabul edilir.",
+                    duration_ms=0.0,
+                )
+            )
             failed += 1
             continue
 
@@ -760,9 +827,9 @@ async def upload_xml(
                     patient_id = writer.write_patient_tree(patient_dto, doc_id)
                     writer.update_source_document_status(doc_id, "SUCCESS")
 
-                result.status              = "SUCCESS"
+                result.status = "SUCCESS"
                 result.patient_external_id = patient_dto.external_id
-                result.patient_db_id       = patient_id
+                result.patient_db_id = patient_id
                 success += 1
                 logger.info("Upload basarili: %s -> hasta %s", filename, patient_dto.external_id)
 
@@ -778,13 +845,13 @@ async def upload_xml(
                 except Exception:
                     conn.rollback()
 
-                result.status        = "FAILED_QUARANTINE"
+                result.status = "FAILED_QUARANTINE"
                 result.error_message = err_msg
                 failed += 1
 
         except Exception as outer_exc:
             conn.rollback()
-            result.status        = "FAILED_QUARANTINE"
+            result.status = "FAILED_QUARANTINE"
             result.error_message = f"{type(outer_exc).__name__}: {outer_exc}"
             failed += 1
         finally:
@@ -828,7 +895,7 @@ async def upload_xml(
 def health_check() -> dict[str, Any]:
     """Servis ve veritabanı bağlantı durumunu döndürür."""
     db_ok = False
-    db_error: Optional[str] = None
+    db_error: str | None = None
     try:
         conn = _get_conn()
         with conn.cursor() as cur:
@@ -855,8 +922,8 @@ def health_check() -> dict[str, Any]:
 @app.get("/", include_in_schema=False)
 def root() -> dict[str, str]:
     return {
-        "app":     app.title,
+        "app": app.title,
         "version": app.version,
-        "docs":    "/docs",
-        "redoc":   "/redoc",
+        "docs": "/docs",
+        "redoc": "/redoc",
     }

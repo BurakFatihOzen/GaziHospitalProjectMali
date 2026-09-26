@@ -10,13 +10,12 @@ Test Edilen Endpoint'ler:
   GET  /api/curves/{trial_id}
   POST /api/upload
 """
+
 from __future__ import annotations
 
 import io
 import sys
 from pathlib import Path
-
-import pytest
 
 _sft_dir = str(Path(__file__).resolve().parent.parent)
 if _sft_dir not in sys.path:
@@ -26,6 +25,7 @@ if _sft_dir not in sys.path:
 # =============================================================================
 # BÖLÜM 1: /health Endpoint Testleri
 # =============================================================================
+
 
 class TestHealthEndpoint:
     """/health endpoint sağlık kontrolü testleri."""
@@ -50,6 +50,7 @@ class TestHealthEndpoint:
 # =============================================================================
 # BÖLÜM 2: /api/cohort Endpoint Testleri
 # =============================================================================
+
 
 class TestCohortEndpoint:
     """GET /api/cohort endpoint'i testleri."""
@@ -79,15 +80,20 @@ class TestCohortEndpoint:
         data = resp.json()
 
         required_fields = [
-            "patient_id", "external_id", "first_name", "last_name",
-            "visit_id", "age", "biological_gender",
-            "fev1_val", "fvc_val", "fev1_pred_percent",
+            "patient_id",
+            "external_id",
+            "first_name",
+            "last_name",
+            "visit_id",
+            "age",
+            "biological_gender",
+            "fev1_val",
+            "fvc_val",
+            "fev1_pred_percent",
         ]
         for patient in data["results"]:
             for field in required_fields:
-                assert field in patient, (
-                    f"'{field}' alanı hasta kaydında eksik: {list(patient.keys())}"
-                )
+                assert field in patient, f"'{field}' alanı hasta kaydında eksik: {list(patient.keys())}"
 
     def test_cohort_gender_filter_male(self, client):
         """gender=Male filtresi uygulandığında tüm sonuçlar Male."""
@@ -125,9 +131,7 @@ class TestCohortEndpoint:
         for patient in data["results"]:
             pct = patient.get("fev1_pred_percent")
             if pct is not None:
-                assert 60.0 <= float(pct) <= 100.0, (
-                    f"FEV1%Pred filtresi dışında değer: {pct}"
-                )
+                assert 60.0 <= float(pct) <= 100.0, f"FEV1%Pred filtresi dışında değer: {pct}"
 
     def test_cohort_age_range_filter(self, client):
         """Yaş aralığı filtresi sonuçları doğru kısıtlar."""
@@ -137,9 +141,7 @@ class TestCohortEndpoint:
         for patient in data["results"]:
             age = patient.get("age")
             if age is not None:
-                assert 8 <= int(age) <= 12, (
-                    f"Yaş filtresi dışında değer: {age}"
-                )
+                assert 8 <= int(age) <= 12, f"Yaş filtresi dışında değer: {age}"
 
     def test_cohort_post_level_type(self, client):
         """level_type=Post filtresi uygulandığında level_type='Post' kayıtlar döner."""
@@ -208,6 +210,7 @@ class TestCohortEndpoint:
 # BÖLÜM 3: /api/cohort/export Endpoint Testleri
 # =============================================================================
 
+
 class TestCohortExportEndpoint:
     """GET /api/cohort/export Excel dışa aktarım testleri."""
 
@@ -255,6 +258,7 @@ class TestCohortExportEndpoint:
 # BÖLÜM 4: /api/curves/{trial_id} Endpoint Testleri
 # =============================================================================
 
+
 class TestCurvesEndpoint:
     """GET /api/curves/{trial_id} eğri veri endpoint testleri."""
 
@@ -289,10 +293,9 @@ class TestCurvesEndpoint:
             assert isinstance(curve["points"], list), "'points' liste olmalı"
             assert "point_count" in curve
             assert curve["point_count"] == len(curve["points"]), (
-                f"point_count ({curve['point_count']}) ile "
-                f"points listesi uzunluğu ({len(curve['points'])}) eşleşmiyor"
+                f"point_count ({curve['point_count']}) ile points listesi uzunluğu ({len(curve['points'])}) eşleşmiyor"
             )
-            for pt in curve["points"][:3]:   # İlk 3'ü kontrol et
+            for pt in curve["points"][:3]:  # İlk 3'ü kontrol et
                 assert "x" in pt, "Koordinat 'x' içermeli"
                 assert "y" in pt, "Koordinat 'y' içermeli"
                 assert isinstance(pt["x"], (int, float))
@@ -309,9 +312,7 @@ class TestCurvesEndpoint:
         assert resp.status_code == 200
         data = resp.json()
         for curve in data["curves"]:
-            assert curve["curve_scope"] == "REPORT", (
-                f"scope=REPORT ile '{curve['curve_scope']}' döndü"
-            )
+            assert curve["curve_scope"] == "REPORT", f"scope=REPORT ile '{curve['curve_scope']}' döndü"
 
     def test_curves_scope_all_includes_report(self, client):
         """scope=ALL tüm eğrileri döndürür."""
@@ -331,9 +332,16 @@ class TestCurvesEndpoint:
         assert resp.status_code == 200
         data = resp.json()
         required_fields = [
-            "curve_id", "trial_id", "curve_type", "curve_scope",
-            "data_type", "x_unit", "y_unit", "sample_rate",
-            "point_count", "points",
+            "curve_id",
+            "trial_id",
+            "curve_type",
+            "curve_scope",
+            "data_type",
+            "x_unit",
+            "y_unit",
+            "sample_rate",
+            "point_count",
+            "points",
         ]
         for curve in data["curves"]:
             for field in required_fields:
@@ -343,6 +351,7 @@ class TestCurvesEndpoint:
 # =============================================================================
 # BÖLÜM 5: POST /api/upload Endpoint Testleri
 # =============================================================================
+
 
 class TestUploadEndpoint:
     """POST /api/upload XML yükleme endpoint testleri."""
@@ -376,9 +385,9 @@ class TestUploadEndpoint:
         assert data["results"], "results listesi boş olmamalı"
         for result in data["results"]:
             assert "status" in result
-            assert result["status"] in (
-                "SUCCESS", "SKIPPED_DUPLICATE", "FAILED_QUARANTINE"
-            ), f"Bilinmeyen status: {result['status']}"
+            assert result["status"] in ("SUCCESS", "SKIPPED_DUPLICATE", "FAILED_QUARANTINE"), (
+                f"Bilinmeyen status: {result['status']}"
+            )
 
     def test_upload_result_has_sha256(self, client, sample_xml_normal):
         """Upload sonucu SHA-256 hash içeriyor."""
@@ -392,9 +401,7 @@ class TestUploadEndpoint:
         sha = result["sha256"]
         # SKIPPED/SUCCESS için hash mevcut olmalı
         if result["status"] != "FAILED_QUARANTINE":
-            assert sha is not None and len(sha) == 64, (
-                f"SHA-256 hash geçersiz: '{sha}'"
-            )
+            assert sha is not None and len(sha) == 64, f"SHA-256 hash geçersiz: '{sha}'"
 
     def test_upload_result_has_duration_ms(self, client, sample_xml_normal):
         """Upload sonucu işlem süresini (duration_ms) içeriyor."""
@@ -408,9 +415,7 @@ class TestUploadEndpoint:
         assert isinstance(result["duration_ms"], (int, float))
         assert result["duration_ms"] >= 0
 
-    def test_upload_multiple_files_parallel(
-        self, client, sample_xml_normal, sample_xml_obstruction
-    ):
+    def test_upload_multiple_files_parallel(self, client, sample_xml_normal, sample_xml_obstruction):
         """Birden fazla XML aynı anda yüklenebilir."""
         resp = client.post(
             "/api/upload",

@@ -11,10 +11,10 @@ Fixture'lar:
   - sample_xml_reversibility: Reversibilite pozitif XML
   - sample_xml_broken: Bozuk / eksik etiketli XML
 """
+
 from __future__ import annotations
 
 import os
-import textwrap
 from pathlib import Path
 
 import psycopg2
@@ -34,16 +34,17 @@ DATABASE_URL: str = os.environ.get(
 # ─── FastAPI uygulamasını içeri al ───────────────────────────────────────────
 # sft_ingestion dizinini sys.path'e ekle
 import sys
+
 _sft_dir = str(Path(__file__).resolve().parent.parent)
 if _sft_dir not in sys.path:
     sys.path.insert(0, _sft_dir)
 
-from api import app  # noqa: E402
-
+from api import app
 
 # =============================================================================
 # VERİTABANI BAĞLANTI FIXTURE'I
 # =============================================================================
+
 
 @pytest.fixture(scope="session")
 def db_conn():
@@ -63,13 +64,14 @@ def db_cursor(db_conn):
     """Her test için yeni cursor açar, test sonunda bağlantıyı rollback eder."""
     cur = db_conn.cursor()
     yield cur
-    db_conn.rollback()   # Test kalıntısı bırakmaz
+    db_conn.rollback()  # Test kalıntısı bırakmaz
     cur.close()
 
 
 # =============================================================================
 # FASTAPI TEST CLIENT FIXTURE'I
 # =============================================================================
+
 
 @pytest.fixture(scope="session")
 def client():
@@ -81,6 +83,7 @@ def client():
 # =============================================================================
 # ÖRNEK VYAIRE XML FIXTURE'LARI
 # =============================================================================
+
 
 def _build_xml(
     external_id: str,
@@ -103,7 +106,7 @@ def _build_xml(
     fev1_fvc = round((fev1 / fvc) * 100, 2) if fvc > 0 else 0.0
 
     # 30 noktalı sahte FVC ekspirasyonu eğrisi
-    x_pts = " ".join(f"{round(i*0.1, 2)},{round(fev1 * (1 - (i/30)**2), 2)}" for i in range(30))
+    x_pts = " ".join(f"{round(i * 0.1, 2)},{round(fev1 * (1 - (i / 30) ** 2), 2)}" for i in range(30))
 
     xml_str = f"""\
 <?xml version="1.0" encoding="UTF-8"?>
@@ -257,7 +260,7 @@ def sample_xml_reversibility_pre() -> bytes:
         weight_kg=38.0,
         visit_date="2026-03-01",
         level_type="Pre",
-        fev1=1.600,   # Pre FEV1 = 1.600 L
+        fev1=1.600,  # Pre FEV1 = 1.600 L
         fvc=2.10,
         fev1_pred_pct=68.0,
         fvc_pred_pct=78.0,
@@ -282,7 +285,7 @@ def sample_xml_reversibility_post() -> bytes:
         weight_kg=38.0,
         visit_date="2026-03-01",
         level_type="Post",
-        fev1=1.850,   # Post FEV1 = 1.850 L
+        fev1=1.850,  # Post FEV1 = 1.850 L
         fvc=2.30,
         fev1_pred_pct=78.7,
         fvc_pred_pct=87.0,

@@ -9,15 +9,13 @@ Test Edilen:
   3. VyaireXMLParser: Minimal XML'den doğru DTO çıkarımı
   4. DBWriter: Bağımsız transaction atomisitesi
 """
+
 from __future__ import annotations
 
 import hashlib
 import io
 import sys
 from pathlib import Path
-
-import psycopg2
-import pytest
 
 _sft_dir = str(Path(__file__).resolve().parent.parent)
 if _sft_dir not in sys.path:
@@ -28,19 +26,22 @@ if _sft_dir not in sys.path:
 # BÖLÜM 1: VyaireXMLParser Birim Testleri
 # =============================================================================
 
+
 class TestVyaireXMLParser:
     """VyaireXMLParser sınıfının izole birim testleri."""
 
     def test_parser_imports_successfully(self):
         """parser.py modülü sorunsuz import edilir."""
-        from parser import VyaireXMLParser, DBWriter
+        from parser import DBWriter, VyaireXMLParser
+
         assert VyaireXMLParser is not None
         assert DBWriter is not None
 
     def test_parser_normal_xml_produces_patient(self, sample_xml_normal):
         """Normal XML → PatientDTO üretilir, external_id dolu."""
         from parser import VyaireXMLParser
-        p = VyaireXMLParser(sample_xml_normal)   # xml_bytes positional
+
+        p = VyaireXMLParser(sample_xml_normal)  # xml_bytes positional
         result = p.parse()
         assert result is not None, "Normal XML → PatientDTO döner (None değil)"
         # PatientDTO.external_id dolu olmalı
@@ -54,12 +55,13 @@ class TestVyaireXMLParser:
         Sistem çökmemeli.
         """
         from parser import VyaireXMLParser
+
         try:
             p = VyaireXMLParser(sample_xml_broken)
             result = p.parse()
             # result None veya DTO olabilir — önemli olan crash olmaması
             assert result is None or hasattr(result, "external_id")
-        except (Exception,) as exc:
+        except Exception:
             # lxml.etree.XMLSyntaxError veya benzeri kabul edilebilir
             # Eğer istisna API katmanında yakalanıyorsa bu test geçer
             assert True  # Exception yakalandı — crash değil
@@ -67,6 +69,7 @@ class TestVyaireXMLParser:
     def test_parser_missing_params_xml_does_not_crash(self, sample_xml_missing_params):
         """Parametre değerleri eksik XML → Parser çökmez, None değerler kabul edilir."""
         from parser import VyaireXMLParser
+
         try:
             p = VyaireXMLParser(sample_xml_missing_params)
             result = p.parse()
@@ -79,6 +82,7 @@ class TestVyaireXMLParser:
 # =============================================================================
 # BÖLÜM 2: SHA-256 Deduplikasyon Testleri (API üzerinden)
 # =============================================================================
+
 
 class TestSHA256Deduplication:
     """
@@ -167,6 +171,4 @@ class TestSHA256Deduplication:
         assert resp.status_code == 200
         data = resp.json()
         result_status = data["results"][0]["status"]
-        assert result_status == "FAILED_QUARANTINE", (
-            f"PDF dosyası → 'FAILED_QUARANTINE' beklenir"
-        )
+        assert result_status == "FAILED_QUARANTINE", "PDF dosyası → 'FAILED_QUARANTINE' beklenir"

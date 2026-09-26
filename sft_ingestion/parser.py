@@ -21,14 +21,12 @@ import logging
 import os
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from io import BytesIO
 from pathlib import Path
-from typing import Optional
 
 import psycopg2
 import psycopg2.extras
-from lxml import etree
 from dotenv import load_dotenv
+from lxml import etree
 
 # .env dosyasını otomatik yükle
 load_dotenv(Path(__file__).resolve().parent / ".env")
@@ -52,10 +50,10 @@ PARSER_VERSION = "1.0"
 # KLINIK ÇEKIRDEK PARAMETRE KISA ADLARI (whitespace-trim sonrası)
 # ---------------------------------------------------------------------------
 CORE_PARAM_MAP: dict[str, str] = {
-    "FEV1":   "fev1_val",
-    "FVC":    "fvc_val",
+    "FEV1": "fev1_val",
+    "FVC": "fvc_val",
     "FEV1%F": "fev1_fvc_ratio",
-    "PEF":    "pef_val",
+    "PEF": "pef_val",
     # % predicted değerleri için özel işlem (bkz. _extract_core_metrics)
 }
 
@@ -65,93 +63,93 @@ CORE_PARAM_MAP: dict[str, str] = {
 # ---------------------------------------------------------------------------
 @dataclass
 class CurveDTO:
-    trial_id: Optional[int]   = None
-    curve_scope: str          = "REPORT"
-    data_type: str            = ""
-    curve_type: str           = ""
-    curve_status: str         = ""
-    sample_rate: str          = ""
-    x_unit: str               = ""
-    y_unit: str               = ""
-    min_x: Optional[float]    = None
-    max_x: Optional[float]    = None
-    min_y: Optional[float]    = None
-    max_y: Optional[float]    = None
-    x_points: list[float]     = field(default_factory=list)
-    y_points: list[float]     = field(default_factory=list)
+    trial_id: int | None = None
+    curve_scope: str = "REPORT"
+    data_type: str = ""
+    curve_type: str = ""
+    curve_status: str = ""
+    sample_rate: str = ""
+    x_unit: str = ""
+    y_unit: str = ""
+    min_x: float | None = None
+    max_x: float | None = None
+    min_y: float | None = None
+    max_y: float | None = None
+    x_points: list[float] = field(default_factory=list)
+    y_points: list[float] = field(default_factory=list)
 
 
 @dataclass
 class ParameterDTO:
-    parameter_id: Optional[int]   = None
-    short_name: str               = ""
-    long_name: str                = ""
-    measured_value: Optional[float] = None
-    predicted_reference_id: Optional[int] = None
-    store_unit: str               = ""
-    display_unit: str             = ""
-    conversion_factor: float      = 1.0
-    raw_value: Optional[str]      = None
+    parameter_id: int | None = None
+    short_name: str = ""
+    long_name: str = ""
+    measured_value: float | None = None
+    predicted_reference_id: int | None = None
+    store_unit: str = ""
+    display_unit: str = ""
+    conversion_factor: float = 1.0
+    raw_value: str | None = None
 
 
 @dataclass
 class TrialDTO:
-    trial_number: int               = 0
-    status: Optional[str]           = None
-    duration: Optional[float]       = None
+    trial_number: int = 0
+    status: str | None = None
+    duration: float | None = None
     parameters: list[ParameterDTO] = field(default_factory=list)
-    curves: list[CurveDTO]          = field(default_factory=list)
+    curves: list[CurveDTO] = field(default_factory=list)
     # Çekirdek metrikler (trial tablosu fiziksel kolonları)
-    fev1_val: Optional[float]       = None
-    fvc_val: Optional[float]        = None
-    fev1_fvc_ratio: Optional[float] = None
-    pef_val: Optional[float]        = None
-    fev1_pred_percent: Optional[float] = None
-    fvc_pred_percent: Optional[float]  = None
+    fev1_val: float | None = None
+    fvc_val: float | None = None
+    fev1_fvc_ratio: float | None = None
+    pef_val: float | None = None
+    fev1_pred_percent: float | None = None
+    fvc_pred_percent: float | None = None
 
 
 @dataclass
 class MeasurementDTO:
-    measurement_type: str         = ""
-    measurement_status: str       = ""
-    local_datetime_raw: str       = ""
-    duration: Optional[float]     = None
-    software_version: str         = ""
-    workstation_name: str         = ""
-    trials: list[TrialDTO]        = field(default_factory=list)
+    measurement_type: str = ""
+    measurement_status: str = ""
+    local_datetime_raw: str = ""
+    duration: float | None = None
+    software_version: str = ""
+    workstation_name: str = ""
+    trials: list[TrialDTO] = field(default_factory=list)
 
 
 @dataclass
 class LevelDTO:
-    level_type: str                     = ""
-    sequence_number: Optional[int]      = None
-    patient_position: str               = ""
+    level_type: str = ""
+    sequence_number: int | None = None
+    patient_position: str = ""
     measurements: list[MeasurementDTO] = field(default_factory=list)
 
 
 @dataclass
 class VisitDTO:
-    local_datetime_raw: str          = ""
-    utc_datetime: Optional[datetime] = None
-    local_datetime: Optional[datetime] = None
-    age: Optional[int]               = None
-    gender: str                      = ""
-    biological_gender: str           = ""
-    height_m: Optional[float]        = None
-    weight_kg: Optional[float]       = None
-    prediction_module: str           = ""
-    review_status: str               = ""
-    levels: list[LevelDTO]           = field(default_factory=list)
+    local_datetime_raw: str = ""
+    utc_datetime: datetime | None = None
+    local_datetime: datetime | None = None
+    age: int | None = None
+    gender: str = ""
+    biological_gender: str = ""
+    height_m: float | None = None
+    weight_kg: float | None = None
+    prediction_module: str = ""
+    review_status: str = ""
+    levels: list[LevelDTO] = field(default_factory=list)
 
 
 @dataclass
 class PatientDTO:
-    external_id: str              = ""
-    first_name: str               = ""
-    last_name: str                = ""
-    birth_date: Optional[datetime] = None
-    ethnic_group: str             = ""
-    visits: list[VisitDTO]        = field(default_factory=list)
+    external_id: str = ""
+    first_name: str = ""
+    last_name: str = ""
+    birth_date: datetime | None = None
+    ethnic_group: str = ""
+    visits: list[VisitDTO] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -178,9 +176,7 @@ class VyaireXMLParser:
             external_id=self._text(patient_el, "ExternalId"),
             first_name=self._text(patient_el, "FirstName"),
             last_name=self._text(patient_el, "LastName"),
-            ethnic_group=self._text(
-                patient_el, "RaceInformation/EthnicGroup"
-            ),
+            ethnic_group=self._text(patient_el, "RaceInformation/EthnicGroup"),
         )
 
         birth_raw = self._text(patient_el, "Birthdate")
@@ -202,7 +198,7 @@ class VyaireXMLParser:
             return VisitDTO()
 
         local_raw = visit_el.get("LocalDate", "")
-        utc_raw   = self._text(visit_el, "UtcDate")
+        utc_raw = self._text(visit_el, "UtcDate")
 
         dto = VisitDTO(
             local_datetime_raw=local_raw,
@@ -223,17 +219,15 @@ class VyaireXMLParser:
 
         return dto
 
-    def _parse_level(
-        self, level_tree_el: etree._Element, visit_dto: Optional[VisitDTO] = None
-    ) -> LevelDTO:
+    def _parse_level(self, level_tree_el: etree._Element, visit_dto: VisitDTO | None = None) -> LevelDTO:
         level_el = level_tree_el.find("Level")
         if level_el is None:
             level_el = level_tree_el.find(".//Level")
         dto = LevelDTO()
         if level_el is not None:
-            dto.level_type       = level_el.get("Type", "")
-            seq_str              = level_el.get("Sequence", "")
-            dto.sequence_number  = int(seq_str) if seq_str.isdigit() else None
+            dto.level_type = level_el.get("Type", "")
+            seq_str = level_el.get("Sequence", "")
+            dto.sequence_number = int(seq_str) if seq_str.isdigit() else None
             dto.patient_position = level_el.get("PatientPosition", "")
 
         for meas_el in level_tree_el.findall(".//Measurement"):
@@ -242,9 +236,7 @@ class VyaireXMLParser:
 
         return dto
 
-    def _parse_measurement(
-        self, meas_el: etree._Element, visit_dto: Optional[VisitDTO] = None
-    ) -> MeasurementDTO:
+    def _parse_measurement(self, meas_el: etree._Element, visit_dto: VisitDTO | None = None) -> MeasurementDTO:
         dto = MeasurementDTO(
             measurement_type=meas_el.get("MeasurementType", ""),
             measurement_status=meas_el.get("Status", ""),
@@ -260,9 +252,7 @@ class VyaireXMLParser:
 
         return dto
 
-    def _parse_trial(
-        self, trial_el: etree._Element, visit_dto: Optional[VisitDTO] = None
-    ) -> TrialDTO:
+    def _parse_trial(self, trial_el: etree._Element, visit_dto: VisitDTO | None = None) -> TrialDTO:
         number_str = trial_el.get("Number", "0")
         dto = TrialDTO(
             trial_number=int(number_str) if number_str.isdigit() else 0,
@@ -291,8 +281,8 @@ class VyaireXMLParser:
         return dto
 
     def _parse_parameter(self, param_el: etree._Element) -> ParameterDTO:
-        pid_str  = param_el.get("ParameterId", "")
-        raw_val  = self._text(param_el, "Value")
+        pid_str = param_el.get("ParameterId", "")
+        raw_val = self._text(param_el, "Value")
         pred_str = self._text(param_el, "PredictedReference")
 
         try:
@@ -321,9 +311,7 @@ class VyaireXMLParser:
             raw_value=raw_val,
         )
 
-    def _extract_core_metrics(
-        self, trial: TrialDTO, visit_dto: Optional[VisitDTO] = None
-    ) -> None:
+    def _extract_core_metrics(self, trial: TrialDTO, visit_dto: VisitDTO | None = None) -> None:
         """
         trial.parameters listesini tarayarak çekirdek klinik metrikleri
         trial nesnesinin fiziksel alanlarına yazar.
@@ -359,10 +347,10 @@ class VyaireXMLParser:
                 else:
                     if is_male:
                         fev1_pred = 4.30 * h - 0.029 * a - 2.49
-                        fvc_pred  = 5.76 * h - 0.026 * a - 4.34
+                        fvc_pred = 5.76 * h - 0.026 * a - 4.34
                     else:
                         fev1_pred = 3.95 * h - 0.025 * a - 2.60
-                        fvc_pred  = 4.43 * h - 0.026 * a - 2.89
+                        fvc_pred = 4.43 * h - 0.026 * a - 2.89
 
                 if trial.fev1_pred_percent is None and trial.fev1_val and fev1_pred > 0:
                     trial.fev1_pred_percent = round((trial.fev1_val / fev1_pred) * 100, 1)
@@ -371,7 +359,7 @@ class VyaireXMLParser:
 
     def _parse_curve(self, curve_el: etree._Element, scope: str) -> CurveDTO:
         data_str = self._text(curve_el, "Data")
-        xs, ys   = self._parse_curve_data(data_str)
+        xs, ys = self._parse_curve_data(data_str)
 
         return CurveDTO(
             curve_scope=scope,
@@ -420,7 +408,7 @@ class VyaireXMLParser:
         return ""
 
     @staticmethod
-    def _float(el: etree._Element, path: str) -> Optional[float]:
+    def _float(el: etree._Element, path: str) -> float | None:
         text = VyaireXMLParser._text(el, path)
         if text:
             try:
@@ -430,7 +418,7 @@ class VyaireXMLParser:
         return None
 
     @staticmethod
-    def _int(el: etree._Element, path: str) -> Optional[int]:
+    def _int(el: etree._Element, path: str) -> int | None:
         text = VyaireXMLParser._text(el, path)
         if text:
             try:
@@ -440,7 +428,7 @@ class VyaireXMLParser:
         return None
 
     @staticmethod
-    def _parse_datetime(raw: str) -> Optional[datetime]:
+    def _parse_datetime(raw: str) -> datetime | None:
         """ISO 8601 (2011-09-09T12:57:23.963Z) → datetime (UTC aware)."""
         if not raw:
             return None
@@ -524,14 +512,17 @@ class DBWriter:
         """
         birth = patient.birth_date.date() if patient.birth_date else None
         with self._conn.cursor() as cur:
-            cur.execute(sql, (
-                self.SOURCE_SYSTEM,
-                patient.external_id,
-                patient.first_name or None,
-                patient.last_name or None,
-                birth,
-                patient.ethnic_group or None,
-            ))
+            cur.execute(
+                sql,
+                (
+                    self.SOURCE_SYSTEM,
+                    patient.external_id,
+                    patient.first_name or None,
+                    patient.last_name or None,
+                    birth,
+                    patient.ethnic_group or None,
+                ),
+            )
             row = cur.fetchone()
             return row[0]
 
@@ -551,20 +542,23 @@ class DBWriter:
             RETURNING id
         """
         with self._conn.cursor() as cur:
-            cur.execute(sql, (
-                patient_id,
-                source_doc_id,
-                visit.local_datetime_raw or None,
-                visit.local_datetime,
-                visit.utc_datetime,
-                visit.age,
-                visit.gender or None,
-                visit.biological_gender or None,
-                visit.height_m,
-                visit.weight_kg,
-                visit.prediction_module or None,
-                visit.review_status or None,
-            ))
+            cur.execute(
+                sql,
+                (
+                    patient_id,
+                    source_doc_id,
+                    visit.local_datetime_raw or None,
+                    visit.local_datetime,
+                    visit.utc_datetime,
+                    visit.age,
+                    visit.gender or None,
+                    visit.biological_gender or None,
+                    visit.height_m,
+                    visit.weight_kg,
+                    visit.prediction_module or None,
+                    visit.review_status or None,
+                ),
+            )
             return cur.fetchone()[0]
 
     def _insert_level(self, level: LevelDTO, visit_id: int) -> int:
@@ -575,17 +569,18 @@ class DBWriter:
             RETURNING id
         """
         with self._conn.cursor() as cur:
-            cur.execute(sql, (
-                visit_id,
-                level.level_type or None,
-                level.sequence_number,
-                level.patient_position or None,
-            ))
+            cur.execute(
+                sql,
+                (
+                    visit_id,
+                    level.level_type or None,
+                    level.sequence_number,
+                    level.patient_position or None,
+                ),
+            )
             return cur.fetchone()[0]
 
-    def _insert_measurement(
-        self, measurement: MeasurementDTO, level_id: int
-    ) -> int:
+    def _insert_measurement(self, measurement: MeasurementDTO, level_id: int) -> int:
         sql = """
             INSERT INTO measurement (level_id, measurement_type, measurement_status,
                                      local_datetime_raw, duration, software_version,
@@ -594,15 +589,18 @@ class DBWriter:
             RETURNING id
         """
         with self._conn.cursor() as cur:
-            cur.execute(sql, (
-                level_id,
-                measurement.measurement_type or None,
-                measurement.measurement_status or None,
-                measurement.local_datetime_raw or None,
-                measurement.duration,
-                measurement.software_version or None,
-                measurement.workstation_name or None,
-            ))
+            cur.execute(
+                sql,
+                (
+                    level_id,
+                    measurement.measurement_type or None,
+                    measurement.measurement_status or None,
+                    measurement.local_datetime_raw or None,
+                    measurement.duration,
+                    measurement.software_version or None,
+                    measurement.workstation_name or None,
+                ),
+            )
             return cur.fetchone()[0]
 
     def _insert_trial(self, trial: TrialDTO, measurement_id: int) -> int:
@@ -623,18 +621,21 @@ class DBWriter:
             RETURNING id
         """
         with self._conn.cursor() as cur:
-            cur.execute(sql, (
-                measurement_id,
-                trial.trial_number,
-                trial.status or None,
-                trial.duration,
-                trial.fev1_val,
-                trial.fvc_val,
-                trial.fev1_fvc_ratio,
-                trial.pef_val,
-                trial.fev1_pred_percent,
-                trial.fvc_pred_percent,
-            ))
+            cur.execute(
+                sql,
+                (
+                    measurement_id,
+                    trial.trial_number,
+                    trial.status or None,
+                    trial.duration,
+                    trial.fev1_val,
+                    trial.fvc_val,
+                    trial.fev1_fvc_ratio,
+                    trial.pef_val,
+                    trial.fev1_pred_percent,
+                    trial.fvc_pred_percent,
+                ),
+            )
             return cur.fetchone()[0]
 
     def _insert_parameters(
@@ -687,22 +688,25 @@ class DBWriter:
         """
         with self._conn.cursor() as cur:
             for c in curves:
-                cur.execute(sql, (
-                    trial_id,
-                    c.curve_scope,
-                    c.data_type or None,
-                    c.curve_type or None,
-                    c.curve_status or None,
-                    c.sample_rate or None,
-                    c.x_unit or None,
-                    c.y_unit or None,
-                    c.min_x,
-                    c.max_x,
-                    c.min_y,
-                    c.max_y,
-                    c.x_points if c.x_points else None,
-                    c.y_points if c.y_points else None,
-                ))
+                cur.execute(
+                    sql,
+                    (
+                        trial_id,
+                        c.curve_scope,
+                        c.data_type or None,
+                        c.curve_type or None,
+                        c.curve_status or None,
+                        c.sample_rate or None,
+                        c.x_unit or None,
+                        c.y_unit or None,
+                        c.min_x,
+                        c.max_x,
+                        c.min_y,
+                        c.max_y,
+                        c.x_points if c.x_points else None,
+                        c.y_points if c.y_points else None,
+                    ),
+                )
 
     # ------------------------------------------------------------------
     # SOURCE DOCUMENT
@@ -711,7 +715,7 @@ class DBWriter:
         self,
         sha256: str,
         original_name: str,
-        raw_bytes: Optional[bytes] = None,
+        raw_bytes: bytes | None = None,
     ) -> int:
         """
         Yeni source_document satırı oluşturur (SHA-256 ile mükerrer önler).
@@ -732,7 +736,7 @@ class DBWriter:
         self,
         doc_id: int,
         status: str,
-        error: Optional[str] = None,
+        error: str | None = None,
     ) -> None:
         sql = """
             UPDATE source_document
@@ -754,15 +758,12 @@ class DBWriter:
 # ---------------------------------------------------------------------------
 # BAĞLANTI YARDIMCISI
 # ---------------------------------------------------------------------------
-def get_connection(dsn: Optional[str] = None) -> psycopg2.extensions.connection:
+def get_connection(dsn: str | None = None) -> psycopg2.extensions.connection:
     """
     PostgreSQL bağlantısı döndürür.
     DSN önceliği: dsn parametresi > DATABASE_URL ortam değişkeni.
     """
-    dsn = dsn or os.environ.get(
-        "DATABASE_URL",
-        "postgresql://postgres:postgres@localhost:5432/sft_db"
-    )
+    dsn = dsn or os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/sft_db")
     conn = psycopg2.connect(dsn)
     conn.autocommit = False
     return conn
