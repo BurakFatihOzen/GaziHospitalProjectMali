@@ -142,3 +142,32 @@ export function formatNum(val: number | null, decimals = 2): string {
   if (val === null || val === undefined) return '—';
   return val.toFixed(decimals);
 }
+
+// ─── HBYS UI Tipleri ──────────────────────────────────────────
+export type HbysMainTab = 
+  | 'hasta_detay'
+  | 'basvuru_listesi'
+  | 'sft_kohort'
+  | 'akis_hacim'
+  | 'konsultasyon'
+  | 'randevu'
+  | 'muayene'
+  | 'fatura'
+  | 'medikal_rapor'
+  | 'arsiv';
+
+export type HbysSubTab =
+  | 'ozet'
+  | 'sft_parametreleri'
+  | 'arsiv_dosya'
+  | 'ileri_tarihli'
+  | 'farkli_merkez';
+
+export interface RecentPatientItem {
+  patient_id: number;
+  external_id: string;
+  name: string;
+  gender: string | null;
+  age: number | null;
+}
+

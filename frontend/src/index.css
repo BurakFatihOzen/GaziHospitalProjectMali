@@ -3,121 +3,385 @@
 @tailwind utilities;
 
 /* ─── Reset & Base ─────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-feature-settings: 'cv11', 'ss01';
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Inter', Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #EEF2F7;
-  color: #1A2942;
+  background-color: #D3DFEE;
+  color: #1A2838;
+  font-size: 12px;
+  user-select: none;
 }
 
-/* ─── Scrollbars (clinical minimal) ────────────────────────── */
-::-webkit-scrollbar          { width: 6px; height: 6px; }
-::-webkit-scrollbar-track    { background: #EEF2F7; }
-::-webkit-scrollbar-thumb    { background: #A8BDD4; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #1A4A80; }
+/* ─── Compact Desktop Scrollbars ───────────────────────────── */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #E8EEF5;
+  border-left: 1px solid #CAD7E6;
+}
+::-webkit-scrollbar-thumb {
+  background: #9DB5D0;
+  border-radius: 2px;
+  border: 2px solid #E8EEF5;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6F8FA8;
+}
 
-/* ─── Clinical Table ────────────────────────────────────────── */
+/* ─── Gazi HBYS Desktop Styling System ──────────────────────── */
 @layer components {
-  .tbl-head-cell {
-    @apply px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wider
-           text-gazi-navy bg-clinical-bg border-b border-clinical-border
-           select-none whitespace-nowrap;
+  /* System window titlebar */
+  .hbys-sys-titlebar {
+    background: linear-gradient(180deg, #1C4474 0%, #0F2D52 100%);
+    color: #FFFFFF;
+    border-bottom: 1px solid #081B33;
   }
 
-  .tbl-cell {
-    @apply px-3 py-2 text-sm text-clinical-textPrimary whitespace-nowrap
-           border-b border-clinical-border/60;
+  /* Subwindow / MDI titlebar */
+  .hbys-window-titlebar {
+    background: linear-gradient(180deg, #376395 0%, #1E4675 100%);
+    color: #FFFFFF;
+    border-bottom: 1px solid #143257;
   }
 
-  .tbl-row {
-    @apply transition-colors duration-75 cursor-pointer;
+  /* Desktop Menu bar */
+  .hbys-menubar {
+    background: linear-gradient(180deg, #F0F4F8 0%, #DEE6F0 100%);
+    border-bottom: 1px solid #B4C6D8;
   }
-  .tbl-row:hover .tbl-cell  { @apply bg-clinical-rowHover; }
-  .tbl-row.selected .tbl-cell { @apply bg-clinical-rowSelected; }
 
-  /* Severity badge */
+  .hbys-menu-item {
+    @apply px-2.5 py-1 text-xs text-[#1D3249] cursor-pointer transition-colors duration-75 select-none;
+  }
+  .hbys-menu-item:hover {
+    background: #CBE0F5;
+    color: #002B5E;
+  }
+
+  /* Desktop Toolbar */
+  .hbys-toolbar {
+    background: linear-gradient(180deg, #FAFBFD 0%, #E6EDF5 100%);
+    border-bottom: 1px solid #BACBDB;
+  }
+
+  .hbys-tool-btn {
+    @apply inline-flex items-center gap-1.5 px-2 py-1 text-xs text-[#20364F] rounded border border-transparent
+           hover:border-[#96B2CF] hover:bg-white/80 active:bg-[#CADDF0] active:border-[#6B90B8]
+           transition-all select-none;
+  }
+
+  /* HBYS Main Module Tabs (Top Tabs) */
+  .hbys-tab {
+    @apply px-3 py-1.5 text-xs font-semibold select-none cursor-pointer border border-b-0 border-[#A6BED4]
+           bg-gradient-to-b from-[#EDF3FA] to-[#D5E2F0] text-[#2C4866] rounded-t
+           hover:from-[#F7FAFD] hover:to-[#E2ECF7] hover:text-[#0C2B4E] transition-all;
+  }
+  .hbys-tab.active {
+    @apply bg-white from-white to-white text-[#003366] border-t-2 border-t-[#C5A059] border-x-[#9BB5CD]
+           shadow-[0_-2px_4px_rgba(0,0,0,0.04)] font-bold;
+    margin-bottom: -1px;
+    z-index: 10;
+  }
+
+  /* HBYS Sub Tabs */
+  .hbys-subtab {
+    @apply px-2.5 py-1 text-xs select-none cursor-pointer border border-[#AEC5DC] bg-[#E8F0F8] text-[#345272]
+           hover:bg-[#F2F7FC] hover:text-[#0E335C] rounded-sm transition-all;
+  }
+  .hbys-subtab.active {
+    @apply bg-white text-[#003366] font-bold border-b-2 border-b-[#003366] shadow-sm;
+  }
+
+  /* Hasta Künye Bandı (Patient Banner) */
+  .hbys-kunye-band {
+    background: linear-gradient(180deg, #FFFFFF 0%, #E8F1FA 100%);
+    border: 1px solid #99BDE0;
+    box-shadow: inset 0 1px 0 #FFFFFF, 0 1px 3px rgba(0, 51, 102, 0.08);
+  }
+
+  /* Gazi HBYS Data Table */
+  .hbys-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    font-size: 11px;
+  }
+
+  .hbys-th {
+    background: linear-gradient(180deg, #F4F8FC 0%, #D8E6F5 100%);
+    border-right: 1px solid #B2C7DC;
+    border-bottom: 1px solid #9EB8D1;
+    color: #103358;
+    font-weight: 600;
+    padding: 3px 6px;
+    text-align: left;
+    white-space: nowrap;
+    user-select: none;
+    font-size: 11px;
+  }
+  .hbys-th:last-child {
+    border-right: none;
+  }
+  .hbys-th:hover {
+    background: linear-gradient(180deg, #FFFFFF 0%, #E2EDF9 100%);
+  }
+
+  .hbys-td {
+    border-right: 1px solid #DFE7F0;
+    border-bottom: 1px solid #DFE7F0;
+    padding: 3px 6px;
+    white-space: nowrap;
+    font-size: 11px;
+    color: #172B3E;
+  }
+  .hbys-td:last-child {
+    border-right: none;
+  }
+
+  .hbys-tr {
+    background-color: #FFFFFF;
+    cursor: pointer;
+  }
+  .hbys-tr:nth-child(even) {
+    background-color: #F8FAFD;
+  }
+  .hbys-tr:hover .hbys-td {
+    background-color: #E6F0FA !important;
+  }
+  .hbys-tr.selected .hbys-td {
+    background-color: #CCE2F7 !important;
+    color: #06264A !important;
+    font-weight: 600;
+  }
+
+  /* Groupbox / Fieldset */
+  .hbys-groupbox {
+    border: 1px solid #9DBAD6;
+    border-radius: 3px;
+    padding: 6px 8px 8px 8px;
+    margin-bottom: 6px;
+    background-color: #FCFDFE;
+  }
+  .hbys-legend {
+    font-size: 11px;
+    font-weight: 600;
+    color: #113862;
+    padding: 0 4px;
+    margin-left: 4px;
+  }
+
+  /* Input & Select */
+  .hbys-input {
+    background-color: #FFFFFF;
+    border: 1px solid #84A3C2;
+    border-radius: 2px;
+    padding: 2px 5px;
+    font-size: 11px;
+    color: #11283F;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+    outline: none;
+  }
+  .hbys-input:focus {
+    border-color: #1E66B6;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 1px #1E66B6;
+  }
+
+  .hbys-select {
+    background-color: #FFFFFF;
+    border: 1px solid #84A3C2;
+    border-radius: 2px;
+    padding: 2px 4px;
+    font-size: 11px;
+    color: #11283F;
+    outline: none;
+  }
+  .hbys-select:focus {
+    border-color: #1E66B6;
+  }
+
+  /* Buttons */
+  .hbys-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #DFE8F2 100%);
+    border: 1px solid #7E9EBE;
+    border-radius: 3px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #143355;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.08s ease-in-out;
+  }
+  .hbys-btn:hover {
+    background: linear-gradient(180deg, #FFFFFF 0%, #CCE0F5 100%);
+    border-color: #5880A8;
+    color: #0A2644;
+  }
+  .hbys-btn:active {
+    background: linear-gradient(180deg, #C2D8EE 0%, #D8E6F5 100%);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+  }
+  .hbys-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background: #E8EEF5;
+    border-color: #B8CADC;
+  }
+
+  .hbys-btn-primary {
+    background: linear-gradient(180deg, #245890 0%, #0F3763 100%);
+    border: 1px solid #0B2544;
+    color: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .hbys-btn-primary:hover {
+    background: linear-gradient(180deg, #2E6CAE 0%, #15457C 100%);
+    border-color: #0E3056;
+    color: #FFFFFF;
+  }
+  .hbys-btn-primary:active {
+    background: linear-gradient(180deg, #0E345E 0%, #194676 100%);
+  }
+
+  .hbys-btn-success {
+    background: linear-gradient(180deg, #2C9E4B 0%, #1B7834 100%);
+    border: 1px solid #145927;
+    color: #FFFFFF;
+  }
+  .hbys-btn-success:hover {
+    background: linear-gradient(180deg, #35B457 0%, #208D3E 100%);
+  }
+
+  .hbys-btn-danger {
+    background: linear-gradient(180deg, #DC3545 0%, #BD2130 100%);
+    border: 1px solid #9C1926;
+    color: #FFFFFF;
+  }
+  .hbys-btn-danger:hover {
+    background: linear-gradient(180deg, #E44857 0%, #CB2837 100%);
+  }
+
+  /* Badges & Severity Indicators */
   .badge {
-    @apply inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold;
+    @apply inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold tracking-tight;
   }
-  .badge-normal   { @apply text-severity-normal   bg-severity-normalBg; }
-  .badge-mild     { @apply text-severity-mild     bg-severity-mildBg; }
-  .badge-moderate { @apply text-severity-moderate bg-severity-moderateBg; }
-  .badge-severe   { @apply text-severity-severe   bg-severity-severeBg; }
-  .badge-unknown  { @apply text-clinical-textMuted bg-clinical-bg; }
+  .badge-normal   { @apply text-emerald-800 bg-emerald-100 border border-emerald-300; }
+  .badge-mild     { @apply text-amber-900 bg-amber-100 border border-amber-300; }
+  .badge-moderate { @apply text-orange-900 bg-orange-100 border border-orange-300; }
+  .badge-severe   { @apply text-red-900 bg-red-100 border border-red-300; }
+  .badge-unknown  { @apply text-slate-700 bg-slate-100 border border-slate-300; }
 
-  /* Form controls */
-  .input-clinical {
-    @apply w-full rounded-md border border-clinical-border bg-white px-2.5 py-1.5
-           text-sm text-clinical-textPrimary placeholder:text-clinical-textMuted
-           focus:outline-none focus:ring-2 focus:ring-gazi-navy/30 focus:border-gazi-navy
-           transition-colors;
+  /* Context Menu */
+  .hbys-context-menu {
+    position: fixed;
+    z-index: 100;
+    background: #FFFFFF;
+    border: 1px solid #7192B3;
+    box-shadow: 2px 3px 8px rgba(0, 30, 60, 0.22);
+    min-width: 220px;
+    padding: 3px 0;
+    border-radius: 2px;
+    font-size: 11px;
   }
-
-  .btn-primary {
-    @apply inline-flex items-center gap-1.5 rounded-md bg-gazi-navy px-3 py-2
-           text-sm font-medium text-white shadow-sm
-           hover:bg-gazi-navyLight active:bg-gazi-navyDark
-           transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  .hbys-context-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    color: #1A2838;
+    cursor: pointer;
+    user-select: none;
   }
-
-  .btn-secondary {
-    @apply inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2
-           text-sm font-medium text-gazi-navy border border-clinical-border shadow-sm
-           hover:bg-clinical-bg active:bg-clinical-rowHover
-           transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  .hbys-context-item:hover {
+    background-color: #1D5C9E;
+    color: #FFFFFF;
   }
-
-  .btn-ghost {
-    @apply inline-flex items-center gap-1.5 rounded-md px-3 py-2
-           text-sm font-medium text-clinical-textSecondary
-           hover:bg-clinical-rowHover hover:text-clinical-textPrimary
-           transition-colors;
-  }
-
-  /* Card */
-  .card {
-    @apply bg-clinical-card rounded-lg shadow-card border border-clinical-border/60;
+  .hbys-context-divider {
+    height: 1px;
+    background-color: #E1E8F0;
+    margin: 3px 0;
   }
 
-  /* Section label */
-  .section-label {
-    @apply text-xs font-semibold uppercase tracking-widest text-clinical-textMuted mb-1.5;
+  /* Statusbar & Taskbar */
+  .hbys-taskbar {
+    background: linear-gradient(180deg, #E8EFF6 0%, #D0DFEE 100%);
+    border-top: 1px solid #A4BDD5;
   }
+  .hbys-task-btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 text-xs border border-[#8DA9C5] bg-white/70
+           hover:bg-white text-[#123152] font-medium shadow-sm transition-all;
+  }
+  .hbys-task-btn.active {
+    @apply bg-gradient-to-b from-[#CCE2F7] to-[#B3D3F2] border-[#557FAD] font-bold text-[#062444]
+           shadow-inner;
+  }
+
+  .hbys-status-panel {
+    border: 1px solid #B0C4D8;
+    border-top-color: #92ABC3;
+    border-left-color: #92ABC3;
+    background-color: #EDF3F9;
+    padding: 1px 6px;
+    font-size: 10.5px;
+    color: #27425F;
+  }
+}
+
+/* ─── Recharts Styling inside HBYS ──────────────────────────── */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #D2DFEE;
+  stroke-dasharray: 2 2;
+}
+.recharts-text {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 10px;
+  fill: #345272;
+}
+.recharts-tooltip-wrapper {
+  z-index: 60;
+}
+
+/* ─── Animation effects ─────────────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn 0.12s ease-out;
+}
+.animate-slide-up {
+  animation: slideUp 0.15s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Spinner ───────────────────────────────────────────────── */
 .spinner {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #D1DCE8;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ADC3DA;
   border-top-color: #003366;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ─── Recharts overrides ────────────────────────────────────── */
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: #D1DCE8;
-  stroke-dasharray: none;
-}
-.recharts-text { font-family: 'Inter', sans-serif; font-size: 11px; }
-.recharts-tooltip-wrapper { z-index: 50; }
-
-/* ─── Drag & Drop zone ──────────────────────────────────────── */
-.drop-zone {
-  @apply border-2 border-dashed border-clinical-border rounded-xl
-         flex flex-col items-center justify-center gap-3
-         transition-colors duration-200 text-center p-8;
-}
-.drop-zone.active {
-  @apply border-gazi-navy bg-clinical-rowSelected;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
