@@ -17,6 +17,8 @@ import io
 import sys
 from pathlib import Path
 
+import pytest
+
 _sft_dir = str(Path(__file__).resolve().parent.parent)
 if _sft_dir not in sys.path:
     sys.path.insert(0, _sft_dir)
@@ -262,31 +264,41 @@ class TestCohortExportEndpoint:
 class TestCurvesEndpoint:
     """GET /api/curves/{trial_id} eğri veri endpoint testleri."""
 
-    KNOWN_TRIAL_ID = 31  # Probe ile doğrulanmış gerçek trial_id
+    @pytest.fixture
+    def known_trial_id(self, db_cursor, client):
+        """Mevcut veritabanında REPORT eğrisi bulunan geçerli bir trial_id döner."""
+        db_cursor.execute("SELECT trial_id FROM curve WHERE curve_scope = 'REPORT' LIMIT 1")
+        row = db_cursor.fetchone()
+        if row:
+            return row[0]
+        resp = client.get("/api/cohort?limit=1")
+        if resp.status_code == 200 and resp.json().get("results"):
+            return resp.json()["results"][0]["trial_id"]
+        pytest.skip("Eğri verisi olan geçerli trial_id bulunamadı")
 
-    def test_curves_known_trial_returns_200(self, client):
+    def test_curves_known_trial_returns_200(self, client, known_trial_id):
         """Bilinen trial_id için GET /api/curves/{id} → 200."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}")
+        resp = client.get(f"/api/curves/{known_trial_id}")
         assert resp.status_code == 200
 
-    def test_curves_response_structure(self, client):
+    def test_curves_response_structure(self, client, known_trial_id):
         """Curve response: trial_id ve curves listesi içeriyor."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}")
+        resp = client.get(f"/api/curves/{known_trial_id}")
         assert resp.status_code == 200
         data = resp.json()
         assert "trial_id" in data
         assert "curves" in data
         assert isinstance(data["curves"], list)
 
-    def test_curves_response_trial_id_matches(self, client):
+    def test_curves_response_trial_id_matches(self, client, known_trial_id):
         """Dönen trial_id istenen trial_id ile eşleşiyor."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}")
+        resp = client.get(f"/api/curves/{known_trial_id}")
         data = resp.json()
-        assert data["trial_id"] == self.KNOWN_TRIAL_ID
+        assert data["trial_id"] == known_trial_id
 
-    def test_curves_points_structure(self, client):
+    def test_curves_points_structure(self, client, known_trial_id):
         """Her curve, x ve y koordinatlı points listesi içeriyor."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}")
+        resp = client.get(f"/api/curves/{known_trial_id}")
         data = resp.json()
         for curve in data["curves"]:
             assert "points" in curve, "Curve 'points' alanı içermeli"
@@ -306,29 +318,29 @@ class TestCurvesEndpoint:
         resp = client.get("/api/curves/999999999")
         assert resp.status_code == 404
 
-    def test_curves_scope_report_default(self, client):
+    def test_curves_scope_report_default(self, client, known_trial_id):
         """Varsayılan scope=REPORT sadece REPORT eğrileri döner."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}?scope=REPORT")
+        resp = client.get(f"/api/curves/{known_trial_id}?scope=REPORT")
         assert resp.status_code == 200
         data = resp.json()
         for curve in data["curves"]:
             assert curve["curve_scope"] == "REPORT", f"scope=REPORT ile '{curve['curve_scope']}' döndü"
 
-    def test_curves_scope_all_includes_report(self, client):
+    def test_curves_scope_all_includes_report(self, client, known_trial_id):
         """scope=ALL tüm eğrileri döndürür."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}?scope=ALL")
+        resp = client.get(f"/api/curves/{known_trial_id}?scope=ALL")
         assert resp.status_code == 200
         data = resp.json()
         assert len(data["curves"]) > 0
 
-    def test_curves_invalid_scope_returns_400(self, client):
+    def test_curves_invalid_scope_returns_400(self, client, known_trial_id):
         """Geçersiz scope → 400 Bad Request."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}?scope=INVALID_SCOPE")
+        resp = client.get(f"/api/curves/{known_trial_id}?scope=INVALID_SCOPE")
         assert resp.status_code == 400
 
-    def test_curves_required_curve_fields(self, client):
+    def test_curves_required_curve_fields(self, client, known_trial_id):
         """Her curve gerekli alanları içeriyor."""
-        resp = client.get(f"/api/curves/{self.KNOWN_TRIAL_ID}")
+        resp = client.get(f"/api/curves/{known_trial_id}")
         assert resp.status_code == 200
         data = resp.json()
         required_fields = [
