@@ -95,9 +95,14 @@ jobs:
           pip install -r sft_ingestion/requirements.txt
           pip install pytest pytest-asyncio httpx pytest-cov anyio
 
+      - name: Create .env File for Tests
+        run: |
+          echo "DATABASE_URL=${{ env.DATABASE_URL }}" > sft_ingestion/.env
+
       - name: Initialize PostgreSQL Schema
         run: |
           PGPASSWORD=postgres psql -h localhost -p 5433 -U postgres -d sft_test_db \
+            -v ON_ERROR_STOP=1 \
             -f sft_ingestion/sql/init_schema.sql
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
@@ -108,10 +113,6 @@ jobs:
           python tests/seed_ci_data.py
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
-
-      - name: Create .env File for Tests
-        run: |
-          echo "DATABASE_URL=${{ env.DATABASE_URL }}" > sft_ingestion/.env
 
       - name: Run Unit Tests (Clinical Logic)
         run: |
